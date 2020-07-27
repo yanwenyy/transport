@@ -17,7 +17,12 @@
         <el-button v-if="" type="primary" @click="addOrUpdateHandle()">新增</el-button>
         <el-upload
           class="inline-block"
-          action="https://jsonplaceholder.typicode.com/posts/">
+          :headers="{'token':token}"
+          :action="this.$http.adornUrl('/biz/factorycar/import/factory/car')"
+          :on-success="handleChange"
+          :on-error="handleChange"
+          :show-file-list="false"
+        >
           <el-button type="warning">批量导入</el-button>
         </el-upload>
         <!--<el-button v-if="isAuth('sys:user:delete')" type="danger" @click="deleteHandle()" :disabled="dataListSelections.length <= 0">批量删除</el-button>-->
@@ -120,6 +125,7 @@
           evnCarNum: '',
           registTime: '',
         },
+        token:'',
         imgUrlfront:'',
         dataList: [],
         pageIndex: 1,
@@ -136,6 +142,7 @@
     activated () {
       this.getDataList();
       this.imgUrlfront=this.$http.adornUrl('/jinding/showImg/');
+      this.token=this.$cookie.get('token')
     },
     methods: {
       // 获取数据列表
@@ -212,6 +219,22 @@
             }
           })
         }).catch(() => {})
+      },
+
+      //导入
+      handleChange(response, file, fileList){
+        if (response && response.code === 10000) {
+          this.$message({
+            message: '导入成功',
+            type: 'success',
+            duration: 1500,
+            onClose: () => {
+              this.getDataList()
+            }
+          })
+        } else {
+          this.$message.error(response.msg)
+        }
       }
     }
   }

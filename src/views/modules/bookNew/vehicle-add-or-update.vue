@@ -12,7 +12,7 @@
           placeholder="请选择时间">
         </el-date-picker>
       </el-form-item>
-      <el-form-item label="进厂过磅时间">
+      <el-form-item label="计量时间">
         <el-date-picker
           v-model="dataForm.dataTime"
           type="date"
@@ -20,7 +20,7 @@
           placeholder="请选择时间">
         </el-date-picker>
       </el-form-item>
-      <el-form-item label="出厂过磅时间">
+      <el-form-item label="退卡时间">
         <el-date-picker
           v-model="dataForm.dataTime"
           type="date"
@@ -132,25 +132,25 @@
         <el-input v-model="dataForm.effectiveData" placeholder="物料名称"></el-input>
       </el-form-item>
       <el-form-item label="计量单号">
-        <el-input v-model="dataForm.effectiveData" placeholder="物料名称"></el-input>
+        <el-input v-model="dataForm.effectiveData" placeholder="计量单号"></el-input>
       </el-form-item>
       <el-form-item label="毛重">
-        <el-input v-model="dataForm.effectiveData" placeholder="物料名称"></el-input>
+        <el-input v-model="dataForm.effectiveData" placeholder="毛重"></el-input>
       </el-form-item>
       <el-form-item label="皮重">
-        <el-input v-model="dataForm.effectiveData" placeholder="物料名称"></el-input>
+        <el-input v-model="dataForm.effectiveData" placeholder="皮重"></el-input>
       </el-form-item>
       <el-form-item label="净重">
-        <el-input v-model="dataForm.effectiveData" placeholder="物料名称"></el-input>
+        <el-input v-model="dataForm.effectiveData" placeholder="净重"></el-input>
       </el-form-item>
       <el-form-item label="集装箱号">
-        <el-input v-model="dataForm.effectiveData" placeholder="物料名称"></el-input>
+        <el-input v-model="dataForm.effectiveData" placeholder="集装箱号"></el-input>
       </el-form-item>
       <el-form-item label="运输方式（铁路/公路）">
-        <el-input v-model="dataForm.effectiveData" placeholder="物料名称"></el-input>
+        <el-input v-model="dataForm.effectiveData" placeholder="运输方式（铁路/公路）"></el-input>
       </el-form-item>
       <el-form-item label="运输单位">
-        <el-input v-model="dataForm.effectiveData" placeholder="物料名称"></el-input>
+        <el-input v-model="dataForm.effectiveData" placeholder="运输单位"></el-input>
       </el-form-item>
     </el-form>
     <span v-if="look!='look'" slot="footer" class="dialog-footer">
@@ -197,28 +197,28 @@
           todayConsumeMoney: ''
         },
         options: [{
-          value: '选项1',
+          value: '国 0:0',
           label: '国 0:0'
         }, {
-          value: '选项2',
+          value: '国 1:1',
           label: '国 1:1'
         }, {
-          value: '选项3',
+          value: '国 2:2',
           label: '国 2:2'
         }, {
-          value: '选项4',
+          value: '国 3:3',
           label: '国 3:3'
         }, {
-          value: '选项5',
+          value: '国 4:4',
           label: '国 4:4'
         }, {
-          value: '选项6',
+          value: '国 5:5',
           label: '国 5:5'
         }, {
-          value: '选项7',
+          value: '国 6:6',
           label: '国 6:6'
         }, {
-          value: '选项8',
+          value: '电动:D',
           label: '电动:D'
         }],
         value: '',

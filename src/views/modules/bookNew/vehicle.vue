@@ -4,16 +4,16 @@
       <el-form-item label="进厂时间:">
         <el-date-picker
           v-model="dataForm.startTime"
-          type="date"
-          value-format="yyyy-MM-dd"
+          type="datetime"
+          value-format="yyyy-MM-dd HH:mm:ss"
           placeholder="选择日期">
         </el-date-picker>
       </el-form-item>
       <el-form-item label="出厂时间:">
         <el-date-picker
           v-model="dataForm.startTime"
-          type="date"
-          value-format="yyyy-MM-dd"
+          type="datetime"
+          value-format="yyyy-MM-dd HH:mm:ss"
           placeholder="选择日期">
         </el-date-picker>
       </el-form-item>
@@ -23,17 +23,70 @@
       <el-form-item label="运输货物名称:">
         <el-input v-model="dataForm.name" placeholder="运输货物名称" clearable></el-input>
       </el-form-item>
+      <el-form-item label="门岗:">
+        <el-input v-model="dataForm.name" placeholder="门岗" clearable></el-input>
+      </el-form-item>
+      <el-form-item label="磅房:">
+        <el-input v-model="dataForm.name" placeholder="磅房" clearable></el-input>
+      </el-form-item>
+      <el-form-item label="集装箱号:">
+        <el-input v-model="dataForm.name" placeholder="集装箱号" clearable></el-input>
+      </el-form-item>
+      <el-form-item label="运输方式:">
+        <el-select v-model="dataForm.ysfs" placeholder="请选择">
+          <el-option
+            v-for="item in ysfs"
+            :key="item.value"
+            :label="item.label"
+            :value="item.value">
+          </el-option>
+        </el-select>
+      </el-form-item>
+      <el-form-item label="燃油种类:">
+        <el-select v-model="dataForm.ryzl" placeholder="请选择">
+          <el-option
+            v-for="item in ryzl"
+            :key="item.value"
+            :label="item.label"
+            :value="item.value">
+          </el-option>
+        </el-select>
+      </el-form-item>
+      <el-form-item label="排放标准:">
+        <el-select v-model="dataForm.pfbz" placeholder="请选择">
+          <el-option
+            v-for="item in pfbz"
+            :key="item.value"
+            :label="item.label"
+            :value="item.value">
+          </el-option>
+        </el-select>
+      </el-form-item>
+
       <el-form-item>
-        <el-button @click="getDataList()">查询</el-button>
+        <el-button @click="getDataList()">查询</el-button> <span class="showMore">显示更多</span>
         <el-button v-if="" type="primary" @click="addOrUpdateHandle()">新增</el-button>
         <el-upload
           class="inline-block"
           action="https://jsonplaceholder.typicode.com/posts/">
           <el-button type="warning">批量导入</el-button>
         </el-upload>
+        <el-popover
+          placement="right"
+          width="400"
+          trigger="click">
+          <template>
+            <el-checkbox :indeterminate="isIndeterminate" v-model="checkAll" @change="handleCheckAllChange">全选</el-checkbox>
+            <el-checkbox-group v-model="checkedCities" @change="handleCheckedCitiesChange">
+              <el-checkbox class="showCheckbox" v-for="city in cities" :label="city" :key="city">{{city}}</el-checkbox>
+            </el-checkbox-group>
+          </template>
+          <el-button slot="reference">批量隐藏列</el-button>
+        </el-popover>
         <!--<el-button v-if="isAuth('sys:user:delete')" type="danger" @click="deleteHandle()" :disabled="dataListSelections.length <= 0">批量删除</el-button>-->
       </el-form-item>
     </el-form>
+
     <el-table
       :data="dataList"
       border
@@ -47,34 +100,40 @@
         width="50">
       </el-table-column>
       <el-table-column
-        prop="id"
+        v-if="checkedCities.indexOf('ID')!=-1"
+        type="index"
         header-align="center"
         align="center"
         width="80"
         label="ID">
       </el-table-column>
       <el-table-column
+        v-if="checkedCities.indexOf('进厂时间')!=-1"
         prop="agencyName"
         align="center"
         label="进厂时间">
       </el-table-column>
       <el-table-column
+        v-if="checkedCities.indexOf('计量时间')!=-1"
         prop="agencyName"
         align="center"
-        label="进厂过磅时间">
+        label="计量时间">
       </el-table-column>
       <el-table-column
+        v-if="checkedCities.indexOf('退卡时间')!=-1"
         prop="agencyName"
         align="center"
-        label="出厂过磅时间">
+        label="退卡时间">
       </el-table-column>
       <el-table-column
+        v-if="checkedCities.indexOf('出厂时间')!=-1"
         prop="dataAmount"
         header-align="center"
         align="center"
         label="出厂时间">
       </el-table-column>
       <el-table-column
+        v-if="checkedCities.indexOf('照片')!=-1"
         header-align="center"
         align="center"
         label="照片">
@@ -83,24 +142,28 @@
         </template>
       </el-table-column>
       <el-table-column
+        v-if="checkedCities.indexOf('门岗名称')!=-1"
         prop="effectiveData"
         header-align="center"
         align="center"
         label="门岗名称">
       </el-table-column>
       <el-table-column
+        v-if="checkedCities.indexOf('磅房名称')!=-1"
         prop="effectiveData"
         header-align="center"
         align="center"
         label="磅房名称">
       </el-table-column>
       <el-table-column
+        v-if="checkedCities.indexOf('车牌号')!=-1"
         prop="todayConsumeMoney"
         header-align="center"
         align="center"
         label="车牌号">
       </el-table-column>
       <el-table-column
+        v-if="checkedCities.indexOf('注册日期')!=-1"
         prop="effective"
         header-align="center"
         align="center"
@@ -110,88 +173,104 @@
         <!--</template>-->
       </el-table-column>
       <el-table-column
+        v-if="checkedCities.indexOf('车辆识别代号')!=-1"
         prop="agencyName"
         align="center"
         label="车辆识别代号(VIN)">
       </el-table-column>
       <el-table-column
+        v-if="checkedCities.indexOf('发动机号码')!=-1"
         prop=""
         align="center"
         label="发动机号码">
       </el-table-column>
       <el-table-column
+        v-if="checkedCities.indexOf('燃油种类')!=-1"
         prop=""
         align="center"
         label="燃油种类">
       </el-table-column>
       <el-table-column
+        v-if="checkedCities.indexOf('随车清单')!=-1"
         prop="effectiveData"
         header-align="center"
         align="center"
         label="随车清单">
       </el-table-column>
       <el-table-column
+        v-if="checkedCities.indexOf('行驶证')!=-1"
         prop="todayConsumeMoney"
         header-align="center"
         align="center"
         label="行驶证">
       </el-table-column>
       <el-table-column
+        v-if="checkedCities.indexOf('排放标准')!=-1"
         prop="dataAmount"
         header-align="center"
         align="center"
         label="排放标准">
       </el-table-column>
       <el-table-column
+        v-if="checkedCities.indexOf('供应商')!=-1"
         prop="agencyName"
         align="center"
         label="供应商">
       </el-table-column>
       <el-table-column
+        v-if="checkedCities.indexOf('物料编码')!=-1"
         prop="agencyName"
         align="center"
         label="物料编码">
       </el-table-column>
       <el-table-column
+        v-if="checkedCities.indexOf('物料名称')!=-1"
         prop="agencyName"
         align="center"
         label="物料名称">
       </el-table-column>
       <el-table-column
+        v-if="checkedCities.indexOf('计量单号')!=-1"
         prop="agencyName"
         align="center"
         label="计量单号">
       </el-table-column>
       <el-table-column
+        v-if="checkedCities.indexOf('毛重')!=-1"
         prop=""
         align="center"
         label="毛重">
       </el-table-column>
       <el-table-column
+        v-if="checkedCities.indexOf('皮重')!=-1"
         prop="dataAmount"
         header-align="center"
         align="center"
         label="皮重">
       </el-table-column>
       <el-table-column
+        v-if="checkedCities.indexOf('净重')!=-1"
         prop="effectiveData"
         header-align="center"
         align="center"
         label="净重">
       </el-table-column>
       <el-table-column
+        v-if="checkedCities.indexOf('集装箱号')!=-1"
         prop="effectiveData"
         header-align="center"
         align="center"
         label="集装箱号">
       </el-table-column>
       <el-table-column
+        v-if="checkedCities.indexOf('运输方式')!=-1"
         prop="effectiveData"
         header-align="center"
         align="center"
         label="运输方式（铁路/公路）">
       </el-table-column>
       <el-table-column
+        v-if="checkedCities.indexOf('运输单位')!=-1"
         prop="effectiveData"
         header-align="center"
         align="center"
@@ -225,6 +304,9 @@
 </template>
 
 <script>
+  const cityOptions = ['ID', '进厂时间', '计量时间', '退卡时间','出厂时间','照片','门岗名称','磅房名称',
+    '车牌号','注册日期','车辆识别代号','发动机号码','燃油种类','随车清单','行驶证','排放阶段','供应商',
+  '物料编码','物料名称','计量单号','毛重','皮重','净重','集装箱号','运输方式','运输单位'];
   import AddOrUpdate from './vehicle-add-or-update'
   export default {
     data () {
@@ -232,7 +314,12 @@
         dataForm: {
           startTime: '',
           endTime: '',
+          ysfs:'',
+          ryzl:'',
+          pfbz:'',
+
         },
+        searchMore:false,
         url:'https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg',
         dataList: [],
         pageIndex: 1,
@@ -241,6 +328,63 @@
         dataListLoading: false,
         dataListSelections: [],
         addOrUpdateVisible: false,
+        checkAll: false,
+        checkedCities: cityOptions,
+        cities: cityOptions,
+        isIndeterminate: true,
+        ryzl:[
+          {
+            value: '柴油',
+            label: '柴油'
+          },
+          {
+            value: '天然气',
+            label: '天然气'
+          },
+          {
+            value: '纯电动',
+            label: '纯电动'
+          },
+          {
+            value: '油电混动',
+            label: '油电混动'
+          },
+        ],
+        pfbz: [{
+          value: '国 0:0',
+          label: '国 0:0'
+        }, {
+          value: '国 1:1',
+          label: '国 1:1'
+        }, {
+          value: '国 2:2',
+          label: '国 2:2'
+        }, {
+          value: '国 3:3',
+          label: '国 3:3'
+        }, {
+          value: '国 4:4',
+          label: '国 4:4'
+        }, {
+          value: '国 5:5',
+          label: '国 5:5'
+        }, {
+          value: '国 6:6',
+          label: '国 6:6'
+        }, {
+          value: '电动:D',
+          label: '电动:D'
+        }],
+        ysfs:[
+          {
+            value: '铁路',
+            label: '铁路'
+          },
+          {
+            value: '公路',
+            label: '公路'
+          }
+        ]
       }
     },
     components: {
@@ -254,7 +398,7 @@
       getDataList () {
         this.dataListLoading = true
         this.$http({
-          url: this.$http.adornUrl(''),
+          url: this.$http.adornUrl('/jinding/factory/car/list'),
           method: 'get',
           params: this.$http.adornParams({
             'pageNum': this.pageIndex,
@@ -325,6 +469,18 @@
             }
           })
         }).catch(() => {})
+      },
+
+
+      //显示隐藏
+      handleCheckAllChange(val) {
+        this.checkedCities = val ? cityOptions : [];
+        this.isIndeterminate = false;
+      },
+      handleCheckedCitiesChange(value) {
+        let checkedCount = value.length;
+        this.checkAll = checkedCount === this.cities.length;
+        this.isIndeterminate = checkedCount > 0 && checkedCount < this.cities.length;
       }
     }
   }
@@ -332,5 +488,18 @@
 <style>
   .inline-block{
     display: inline-block;
+  }
+  .showCheckbox{
+    width: 80px!important;
+    display: inline-block;
+    margin-left: 0!important;
+  }
+  .el-input{
+    width: 150px;
+  }
+  .showMore{
+    color:cornflowerblue;
+    cursor: pointer;
+    margin-right: 30px;
   }
 </style>
