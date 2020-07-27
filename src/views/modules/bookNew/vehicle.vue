@@ -1,39 +1,17 @@
 <template>
   <div class="mod-user">
     <el-form :inline="true" :model="dataForm" @keyup.enter.native="getDataList()">
-      <el-form-item label="进厂时间:">
-        <el-date-picker
-          v-model="dataForm.startTime"
-          type="datetime"
-          value-format="yyyy-MM-dd HH:mm:ss"
-          placeholder="选择日期">
-        </el-date-picker>
-      </el-form-item>
-      <el-form-item label="出厂时间:">
-        <el-date-picker
-          v-model="dataForm.startTime"
-          type="datetime"
-          value-format="yyyy-MM-dd HH:mm:ss"
-          placeholder="选择日期">
-        </el-date-picker>
-      </el-form-item>
-      <el-form-item label="车牌号:">
-        <el-input v-model="dataForm.name" placeholder="车牌号" clearable></el-input>
-      </el-form-item>
-      <el-form-item label="运输货物名称:">
-        <el-input v-model="dataForm.name" placeholder="运输货物名称" clearable></el-input>
-      </el-form-item>
       <el-form-item label="门岗:">
-        <el-input v-model="dataForm.name" placeholder="门岗" clearable></el-input>
+        <el-input v-model="dataForm.doorPostName" placeholder="门岗" clearable></el-input>
       </el-form-item>
       <el-form-item label="磅房:">
-        <el-input v-model="dataForm.name" placeholder="磅房" clearable></el-input>
+        <el-input v-model="dataForm.poundRoom" placeholder="磅房" clearable></el-input>
       </el-form-item>
       <el-form-item label="集装箱号:">
-        <el-input v-model="dataForm.name" placeholder="集装箱号" clearable></el-input>
+        <el-input v-model="dataForm.containerNum" placeholder="集装箱号" clearable></el-input>
       </el-form-item>
       <el-form-item label="运输方式:">
-        <el-select v-model="dataForm.ysfs" placeholder="请选择">
+        <el-select v-model="dataForm.tranType" placeholder="请选择">
           <el-option
             v-for="item in ysfs"
             :key="item.value"
@@ -43,7 +21,7 @@
         </el-select>
       </el-form-item>
       <el-form-item label="燃油种类:">
-        <el-select v-model="dataForm.ryzl" placeholder="请选择">
+        <el-select v-model="dataForm.fuelType" placeholder="请选择">
           <el-option
             v-for="item in ryzl"
             :key="item.value"
@@ -53,7 +31,7 @@
         </el-select>
       </el-form-item>
       <el-form-item label="排放标准:">
-        <el-select v-model="dataForm.pfbz" placeholder="请选择">
+        <el-select v-model="dataForm.emissionStand" placeholder="请选择">
           <el-option
             v-for="item in pfbz"
             :key="item.value"
@@ -62,15 +40,42 @@
           </el-option>
         </el-select>
       </el-form-item>
-
+      <el-form-item v-show="searchMore" label="进厂时间:">
+        <el-date-picker
+          v-model="dataForm.enterTime"
+          type="datetime"
+          value-format="yyyy-MM-dd HH:mm:ss"
+          placeholder="选择日期">
+        </el-date-picker>
+      </el-form-item>
+      <el-form-item v-show="searchMore" label="出厂时间:">
+        <el-date-picker
+          v-model="dataForm.outFactoryTime"
+          type="datetime"
+          value-format="yyyy-MM-dd HH:mm:ss"
+          placeholder="选择日期">
+        </el-date-picker>
+      </el-form-item>
+      <el-form-item v-show="searchMore" label="车牌号:">
+        <el-input v-model="dataForm.carNum" placeholder="车牌号" clearable></el-input>
+      </el-form-item>
+      <el-form-item v-show="searchMore" label="运输货物名称:">
+        <el-input v-model="dataForm.materialsName" placeholder="运输货物名称" clearable></el-input>
+      </el-form-item>
       <el-form-item>
-        <el-button @click="getDataList()">查询</el-button> <span class="showMore">显示更多</span>
+        <el-button @click="getDataList()">查询</el-button> <span class="showMore" @click="searchMore=!searchMore">{{searchMore?'收起':'显示更多'}}</span>
         <el-button v-if="" type="primary" @click="addOrUpdateHandle()">新增</el-button>
         <el-upload
           class="inline-block"
-          action="https://jsonplaceholder.typicode.com/posts/">
+          :headers="{'token':token}"
+          :action="this.$http.adornUrl('/biz/tran/import/tran/car')"
+          :on-success="handleChange"
+          :on-error="handleChange"
+          :show-file-list="false"
+        >
           <el-button type="warning">批量导入</el-button>
         </el-upload>
+        <el-button type="warning" @click="down">导出</el-button>
         <el-popover
           placement="right"
           width="400"
@@ -109,62 +114,71 @@
       </el-table-column>
       <el-table-column
         v-if="checkedCities.indexOf('进厂时间')!=-1"
-        prop="agencyName"
+        prop="enterTime"
         align="center"
         label="进厂时间">
       </el-table-column>
       <el-table-column
         v-if="checkedCities.indexOf('计量时间')!=-1"
-        prop="agencyName"
+        prop="weighTime"
         align="center"
         label="计量时间">
       </el-table-column>
       <el-table-column
         v-if="checkedCities.indexOf('退卡时间')!=-1"
-        prop="agencyName"
+        prop="checkOutTime"
         align="center"
         label="退卡时间">
       </el-table-column>
       <el-table-column
         v-if="checkedCities.indexOf('出厂时间')!=-1"
-        prop="dataAmount"
+        prop="outFactoryTime"
         header-align="center"
         align="center"
         label="出厂时间">
       </el-table-column>
       <el-table-column
-        v-if="checkedCities.indexOf('照片')!=-1"
+        v-if="checkedCities.indexOf('进厂照片')!=-1"
         header-align="center"
         align="center"
-        label="照片">
+        label="进厂照片">
         <template slot-scope="scope">
-          <img class="table-list-img" :src="url" alt="">
+          <img v-for="item in (scope.row.enterImg?scope.row.enterImg.split(','):[])" class="table-list-img" :src="item.indexOf('http')!=-1?item:imgUrlfront+item" alt="">
+        </template>
+      </el-table-column>
+      <el-table-column
+        v-if="checkedCities.indexOf('出厂照片')!=-1"
+        header-align="center"
+        align="center"
+        label="出厂照片">
+        <template slot-scope="scope">
+          <img v-for="item in (scope.row.outImg?scope.row.outImg.split(','):[])" class="table-list-img" :src="(item.indexOf('http')!=-1?item:imgUrlfront+item)" alt="">
         </template>
       </el-table-column>
       <el-table-column
         v-if="checkedCities.indexOf('门岗名称')!=-1"
-        prop="effectiveData"
+        prop="doorPostName"
         header-align="center"
         align="center"
         label="门岗名称">
       </el-table-column>
       <el-table-column
         v-if="checkedCities.indexOf('磅房名称')!=-1"
-        prop="effectiveData"
+        prop="poundRoom"
         header-align="center"
         align="center"
         label="磅房名称">
       </el-table-column>
       <el-table-column
         v-if="checkedCities.indexOf('车牌号')!=-1"
-        prop="todayConsumeMoney"
+        prop="carNum"
         header-align="center"
         align="center"
         label="车牌号">
       </el-table-column>
       <el-table-column
         v-if="checkedCities.indexOf('注册日期')!=-1"
-        prop="effective"
+        prop="registTime"
         header-align="center"
         align="center"
         label="注册日期">
@@ -174,104 +188,110 @@
       </el-table-column>
       <el-table-column
         v-if="checkedCities.indexOf('车辆识别代号')!=-1"
-        prop="agencyName"
+        prop="vehicleNum"
         align="center"
         label="车辆识别代号(VIN)">
       </el-table-column>
       <el-table-column
         v-if="checkedCities.indexOf('发动机号码')!=-1"
-        prop=""
+        prop="engineNum"
         align="center"
         label="发动机号码">
       </el-table-column>
       <el-table-column
         v-if="checkedCities.indexOf('燃油种类')!=-1"
-        prop=""
+        prop="fuelType"
         align="center"
         label="燃油种类">
       </el-table-column>
       <el-table-column
         v-if="checkedCities.indexOf('随车清单')!=-1"
-        prop="effectiveData"
         header-align="center"
         align="center"
         label="随车清单">
+        <template slot-scope="scope">
+          <img class="table-list-img" :src="(scope.row.carCheckList.indexOf('http')!=-1?scope.row.carCheckList:imgUrlfront+scope.row.carCheckList)" alt="">
+        </template>
       </el-table-column>
       <el-table-column
         v-if="checkedCities.indexOf('行驶证')!=-1"
-        prop="todayConsumeMoney"
         header-align="center"
         align="center"
         label="行驶证">
+        <template slot-scope="scope">
+          <img class="table-list-img" :src="(scope.row.drivinglLicense.indexOf('http')!=-1?scope.row.drivinglLicense:imgUrlfront+scope.row.drivinglLicense)" alt="">
+        </template>
       </el-table-column>
       <el-table-column
-        v-if="checkedCities.indexOf('排放标准')!=-1"
-        prop="dataAmount"
+        v-if="checkedCities.indexOf('排放阶段')!=-1"
+        prop="emissionStand"
         header-align="center"
         align="center"
-        label="排放标准">
+        label="排放阶段">
       </el-table-column>
       <el-table-column
         v-if="checkedCities.indexOf('供应商')!=-1"
-        prop="agencyName"
+        prop="clientName"
         align="center"
         label="供应商">
       </el-table-column>
       <el-table-column
         v-if="checkedCities.indexOf('物料编码')!=-1"
-        prop="agencyName"
+        prop="materialsNum"
         align="center"
         label="物料编码">
       </el-table-column>
       <el-table-column
         v-if="checkedCities.indexOf('物料名称')!=-1"
-        prop="agencyName"
+        prop="materialsName"
         align="center"
         label="物料名称">
       </el-table-column>
       <el-table-column
         v-if="checkedCities.indexOf('计量单号')!=-1"
-        prop="agencyName"
+        prop="measureNum"
         align="center"
         label="计量单号">
       </el-table-column>
       <el-table-column
         v-if="checkedCities.indexOf('毛重')!=-1"
-        prop=""
+        prop="crossWeigh"
         align="center"
         label="毛重">
       </el-table-column>
       <el-table-column
         v-if="checkedCities.indexOf('皮重')!=-1"
-        prop="dataAmount"
+        prop="tareWeigh"
         header-align="center"
         align="center"
         label="皮重">
       </el-table-column>
       <el-table-column
         v-if="checkedCities.indexOf('净重')!=-1"
-        prop="effectiveData"
+        prop="netWeigh"
         header-align="center"
         align="center"
         label="净重">
       </el-table-column>
       <el-table-column
         v-if="checkedCities.indexOf('集装箱号')!=-1"
-        prop="effectiveData"
+        prop="containerNum"
         header-align="center"
         align="center"
         label="集装箱号">
       </el-table-column>
       <el-table-column
         v-if="checkedCities.indexOf('运输方式')!=-1"
-        prop="effectiveData"
         header-align="center"
         align="center"
         label="运输方式（铁路/公路）">
+        <template slot-scope="scope">
+          {{scope.row.effectiveData==1?'公路':'铁路'}}
+        </template>
       </el-table-column>
       <el-table-column
         v-if="checkedCities.indexOf('运输单位')!=-1"
-        prop="effectiveData"
+        prop="transportUnit"
         header-align="center"
         align="center"
         label="运输单位">
@@ -283,9 +303,9 @@
         width="150"
         label="操作">
         <template slot-scope="scope">
-          <el-button v-if="" type="text" size="small" @click="addOrUpdateHandle(scope.row.id,'look')">查看</el-button>
+          <!--<el-button v-if="" type="text" size="small" @click="addOrUpdateHandle(scope.row.id,'look')">查看</el-button>-->
           <el-button v-if="" type="text" size="small" @click="addOrUpdateHandle(scope.row.id)">修改</el-button>
-          <el-button v-if="" type="text" size="small" @click="deleteHandle(scope.row.id)">删除</el-button>
+          <!--<el-button v-if="" type="text" size="small" @click="deleteHandle(scope.row.id)">删除</el-button>-->
         </template>
       </el-table-column>
     </el-table>
@@ -304,7 +324,7 @@
 </template>
 
 <script>
-  const cityOptions = ['ID', '进厂时间', '计量时间', '退卡时间','出厂时间','照片','门岗名称','磅房名称',
+  const cityOptions = ['ID', '进厂时间', '计量时间', '退卡时间','出厂时间','进厂照片','出厂照片','门岗名称','磅房名称',
     '车牌号','注册日期','车辆识别代号','发动机号码','燃油种类','随车清单','行驶证','排放阶段','供应商',
   '物料编码','物料名称','计量单号','毛重','皮重','净重','集装箱号','运输方式','运输单位'];
   import AddOrUpdate from './vehicle-add-or-update'
@@ -312,11 +332,16 @@
     data () {
       return {
         dataForm: {
-          startTime: '',
-          endTime: '',
-          ysfs:'',
-          ryzl:'',
-          pfbz:'',
+          enterTime: '',
+          outFactoryTime: '',
+          carNum:'',
+          materialsName:'',
+          doorPostName:'',
+          poundRoom: '',
+          containerNum: '',
+          tranType:'',
+          emissionStand:'',
+          fuelType:'',
 
         },
         searchMore:false,
@@ -332,6 +357,8 @@
         checkedCities: cityOptions,
         cities: cityOptions,
         isIndeterminate: true,
+        imgUrlfront:'',
+        token:'',
         ryzl:[
           {
             value: '柴油',
@@ -350,7 +377,8 @@
             label: '油电混动'
           },
         ],
-        pfbz: [{
+        pfbz: [
+          {
           value: '国 0:0',
           label: '国 0:0'
         }, {
@@ -392,25 +420,35 @@
     },
     activated () {
       this.getDataList();
+      this.imgUrlfront=this.$http.adornUrl('/jinding/showImg/');
+      this.token=this.$cookie.get('token')
     },
     methods: {
       // 获取数据列表
       getDataList () {
         this.dataListLoading = true
         this.$http({
-          url: this.$http.adornUrl('/jinding/factory/car/list'),
+          url: this.$http.adornUrl('/jinding/tran/list'),
           method: 'get',
           params: this.$http.adornParams({
             'pageNum': this.pageIndex,
             'pageSize': this.pageSize,
-            'agencyId': this.dataForm.agencyId,
-            'startTime': this.dataForm.startTime,
-            'endTime': this.dataForm.endTime
+            'enterTime': this.dataForm.startTime||'',
+            'outFactoryTime': this.dataForm.endTime||'',
+            'carNum': this.dataForm.startTime,
+            'materialsName': this.dataForm.materialsName,
+            'doorPostName': this.dataForm.doorPostName,
+            'poundRoom': this.dataForm.poundRoom,
+            'containerNum': this.dataForm.containerNum,
+            'tranType': this.dataForm.tranType,
+            'emissionStand': this.dataForm.emissionStand,
+            'fuelType': this.dataForm.fuelType,
+
           })
         }).then(({data}) => {
-          if (data && data.code === 0) {
-            this.dataList = data.page.list
-            this.totalPage = data.page.totalCount
+          if (data && data.code === 10000) {
+            this.dataList = data.data
+            this.totalPage = data.total
           } else {
             this.dataList = []
             this.totalPage = 0
@@ -481,6 +519,54 @@
         let checkedCount = value.length;
         this.checkAll = checkedCount === this.cities.length;
         this.isIndeterminate = checkedCount > 0 && checkedCount < this.cities.length;
+      },
+
+      //导入
+      handleChange(response, file, fileList){
+        if (response && response.code === 10000) {
+          this.$message({
+            message: '导入成功',
+            type: 'success',
+            duration: 1500,
+            onClose: () => {
+              this.getDataList()
+            }
+          })
+        } else {
+          this.$message.error(response.msg)
+        }
+      },
+
+      //导出
+      down (){
+        this.$http({
+          url: this.$http.adornUrl('/biz/tran/po/list'),
+          method: 'get',
+          params: this.$http.adornParams({
+            'pageNum': this.pageIndex,
+            'pageSize': this.pageSize,
+            'enterTime': this.dataForm.startTime||'',
+            'outFactoryTime': this.dataForm.endTime||'',
+            'carNum': this.dataForm.startTime,
+            'materialsName': this.dataForm.materialsName,
+            'doorPostName': this.dataForm.doorPostName,
+            'poundRoom': this.dataForm.poundRoom,
+            'containerNum': this.dataForm.containerNum,
+            'tranType': this.dataForm.tranType,
+            'emissionStand': this.dataForm.emissionStand,
+            'fuelType': this.dataForm.fuelType,
+
+          })
+        }).then(({data}) => {
+          console.log(data)
+          // if (data && data.code === 10000) {
+          //   this.dataList = data.data
+          //   this.totalPage = data.total
+          // } else {
+          //   this.dataList = []
+          //   this.totalPage = 0
+          // }
+        })
       }
     }
   }
@@ -501,5 +587,8 @@
     color:cornflowerblue;
     cursor: pointer;
     margin-right: 30px;
+  }
+  .table-list-img{
+    margin-bottom: 10px;
   }
 </style>

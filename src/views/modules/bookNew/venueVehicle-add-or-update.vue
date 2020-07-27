@@ -34,7 +34,7 @@
       <el-form-item label="随车清单">
         <div class="inline-block box-img" v-if="dataForm.carCheckList!=''">
           <el-image class="look-img" title="点击查看大图"
-          :src="imgUrlfront+dataForm.carCheckList" :preview-src-list="srcList" >
+                    :src="dataForm.carCheckList.indexOf('http')!=-1?dataForm.carCheckList:imgUrlfront+dataForm.carCheckList" :preview-src-list="srcList" >
           </el-image>
           <i class="el-icon-error box-img-del" @click="dataForm.carCheckList=''"></i>
         </div>
@@ -55,7 +55,7 @@
       <el-form-item label="行驶证">
         <div class="inline-block box-img" v-if="dataForm.drivinglLicense!=''">
           <el-image class="look-img" title="点击查看大图"
-                    :src="imgUrlfront+dataForm.drivinglLicense" :preview-src-list="srcList">
+                    :src="dataForm.drivinglLicense.indexOf('http')!=-1?dataForm.drivinglLicense:imgUrlfront+dataForm.drivinglLicense" :preview-src-list="srcList">
           </el-image>
           <i class="el-icon-error box-img-del" @click="dataForm.drivinglLicense=''"></i>
         </div>
@@ -185,7 +185,7 @@
                 this.dataForm.emissionStand = data.data.emissionStand;
                 this.dataForm.carCheckList = data.data.carCheckList;
                 this.dataForm.drivinglLicense = data.data.drivinglLicense;
-                var list=[this.imgUrlfront+data.data.carCheckList,this.imgUrlfront+data.data.drivinglLicense];
+                var list=[this.dataForm.carCheckList.indexOf('http')!=-1?this.dataForm.carCheckList:this.imgUrlfront+data.data.carCheckList,this.dataForm.drivinglLicense.indexOf('http')!=-1?this.dataForm.drivinglLicense:this.imgUrlfront+data.data.drivinglLicense];
                 this.srcList=list;
               }
             })
@@ -270,13 +270,6 @@
         } else {
           this.$message.error(response.msg)
         }
-      },
-      //最大限制
-      handExceed(){
-        this.$message.error('最多上传一张图片')
-      },
-      handExceed2(){
-        this.$message.error('最多上传一张图片')
       }
     }
   }
