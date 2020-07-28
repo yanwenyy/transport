@@ -32,13 +32,13 @@
         </el-select>
       </el-form-item>
       <el-form-item label="随车清单">
-        <div class="inline-block box-img" v-if="dataForm.carCheckList!=''">
+        <div class="inline-block box-img" v-if="dataForm.carCheckList&&dataForm.carCheckList!=''">
           <el-image class="look-img" title="点击查看大图"
                     :src="dataForm.carCheckList.indexOf('http')!=-1?dataForm.carCheckList:imgUrlfront+dataForm.carCheckList" :preview-src-list="srcList" >
           </el-image>
           <i class="el-icon-error box-img-del" @click="dataForm.carCheckList=''"></i>
         </div>
-        <div class="inline-block box-img"  v-if="dataForm.carCheckList==''">
+        <div class="inline-block box-img"  v-if="dataForm.carCheckList==''||!dataForm.carCheckList">
           <el-upload
             :show-file-list="!dataForm.id&& dataForm.carCheckList==''"
             :headers="{'token':token}"
@@ -53,13 +53,13 @@
         </div>
       </el-form-item>
       <el-form-item label="行驶证">
-        <div class="inline-block box-img" v-if="dataForm.drivinglLicense!=''">
+        <div class="inline-block box-img" v-if="dataForm.drivinglLicense&&dataForm.drivinglLicense!=''">
           <el-image class="look-img" title="点击查看大图"
                     :src="dataForm.drivinglLicense.indexOf('http')!=-1?dataForm.drivinglLicense:imgUrlfront+dataForm.drivinglLicense" :preview-src-list="srcList">
           </el-image>
           <i class="el-icon-error box-img-del" @click="dataForm.drivinglLicense=''"></i>
         </div>
-        <div class="inline-block box-img" v-if="dataForm.drivinglLicense==''">
+        <div class="inline-block box-img" v-if="dataForm.drivinglLicense==''||!dataForm.drivinglLicense">
           <el-upload
             :show-file-list="!dataForm.id && dataForm.drivinglLicense==''"
             :headers="{'token':token}"

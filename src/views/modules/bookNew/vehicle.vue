@@ -11,7 +11,7 @@
         <el-input v-model="dataForm.containerNum" placeholder="集装箱号" clearable></el-input>
       </el-form-item>
       <el-form-item label="运输方式:">
-        <el-select v-model="dataForm.tranType" placeholder="请选择">
+        <el-select clearable  v-model="dataForm.tranType" placeholder="请选择">
           <el-option
             v-for="item in ysfs"
             :key="item.value"
@@ -21,7 +21,7 @@
         </el-select>
       </el-form-item>
       <el-form-item label="燃油种类:">
-        <el-select v-model="dataForm.fuelType" placeholder="请选择">
+        <el-select clearable  v-model="dataForm.fuelType" placeholder="请选择">
           <el-option
             v-for="item in ryzl"
             :key="item.value"
@@ -31,7 +31,7 @@
         </el-select>
       </el-form-item>
       <el-form-item label="排放标准:">
-        <el-select v-model="dataForm.emissionStand" placeholder="请选择">
+        <el-select clearable  v-model="dataForm.emissionStand" placeholder="请选择">
           <el-option
             v-for="item in pfbz"
             :key="item.value"
@@ -63,7 +63,7 @@
         <el-input v-model="dataForm.materialsName" placeholder="运输货物名称" clearable></el-input>
       </el-form-item>
       <el-form-item>
-        <el-button @click="getDataList()">查询</el-button> <span class="showMore" @click="searchMore=!searchMore">{{searchMore?'收起':'显示更多'}}</span>
+        <span class="showMore" @click="searchMore=!searchMore">{{searchMore?'收起':'显示更多'}}</span><el-button @click="getDataList()">查询</el-button>
         <el-button v-if="" type="primary" @click="addOrUpdateHandle()">新增</el-button>
         <el-upload
           class="inline-block"
@@ -143,7 +143,7 @@
         align="center"
         label="进厂照片">
         <template slot-scope="scope">
-          <img v-for="item in (scope.row.enterImg?scope.row.enterImg.split(','):[])" class="table-list-img" :src="item.indexOf('http')!=-1?item:imgUrlfront+item" alt="">
+          <img v-for="item in (scope.row.enterImg?scope.row.enterImg.split(','):[])" class="table-list-img" :src="item&&item.indexOf('http')!=-1?item:imgUrlfront+item" alt="">
         </template>
       </el-table-column>
       <el-table-column
@@ -152,7 +152,7 @@
         align="center"
         label="出厂照片">
         <template slot-scope="scope">
-          <img v-for="item in (scope.row.outImg?scope.row.outImg.split(','):[])" class="table-list-img" :src="(item.indexOf('http')!=-1?item:imgUrlfront+item)" alt="">
+          <img v-for="item in (scope.row.outImg?scope.row.outImg.split(','):[])" class="table-list-img" :src="(item&&item.indexOf('http')!=-1?item:imgUrlfront+item)" alt="">
         </template>
       </el-table-column>
       <el-table-column
@@ -210,7 +210,7 @@
         align="center"
         label="随车清单">
         <template slot-scope="scope">
-          <img class="table-list-img" :src="(scope.row.carCheckList.indexOf('http')!=-1?scope.row.carCheckList:imgUrlfront+scope.row.carCheckList)" alt="">
+          <img class="table-list-img" :src="(scope.row.carCheckList&&scope.row.carCheckList.indexOf('http')!=-1?scope.row.carCheckList:imgUrlfront+scope.row.carCheckList)" alt="">
         </template>
       </el-table-column>
       <el-table-column
@@ -219,7 +219,7 @@
         align="center"
         label="行驶证">
         <template slot-scope="scope">
-          <img class="table-list-img" :src="(scope.row.drivinglLicense.indexOf('http')!=-1?scope.row.drivinglLicense:imgUrlfront+scope.row.drivinglLicense)" alt="">
+          <img class="table-list-img" :src="(scope.row.drivinglLicense&&scope.row.drivinglLicense.indexOf('http')!=-1?scope.row.drivinglLicense:imgUrlfront+scope.row.drivinglLicense)" alt="">
         </template>
       </el-table-column>
       <el-table-column
@@ -286,7 +286,7 @@
         align="center"
         label="运输方式（铁路/公路）">
         <template slot-scope="scope">
-          {{scope.row.effectiveData==1?'公路':'铁路'}}
+          {{scope.row.tranType==1?'公路':'铁路'}}
         </template>
       </el-table-column>
       <el-table-column
@@ -305,7 +305,7 @@
         <template slot-scope="scope">
           <!--<el-button v-if="" type="text" size="small" @click="addOrUpdateHandle(scope.row.id,'look')">查看</el-button>-->
           <el-button v-if="" type="text" size="small" @click="addOrUpdateHandle(scope.row.id)">修改</el-button>
-          <!--<el-button v-if="" type="text" size="small" @click="deleteHandle(scope.row.id)">删除</el-button>-->
+          <el-button v-if="" type="text" size="small" @click="deleteHandle(scope.row.id)">删除</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -405,11 +405,11 @@
         }],
         ysfs:[
           {
-            value: '铁路',
+            value: '0',
             label: '铁路'
           },
           {
-            value: '公路',
+            value: '1',
             label: '公路'
           }
         ]
@@ -433,9 +433,9 @@
           params: this.$http.adornParams({
             'pageNum': this.pageIndex,
             'pageSize': this.pageSize,
-            'enterTime': this.dataForm.startTime||'',
-            'outFactoryTime': this.dataForm.endTime||'',
-            'carNum': this.dataForm.startTime,
+            'enterTime': this.dataForm.enterTime||'',
+            'outFactoryTime': this.dataForm.outFactoryTime||'',
+            'carNum': this.dataForm.carNum,
             'materialsName': this.dataForm.materialsName,
             'doorPostName': this.dataForm.doorPostName,
             'poundRoom': this.dataForm.poundRoom,
@@ -489,7 +489,7 @@
           type: 'warning'
         }).then(() => {
           this.$http({
-            url: this.$http.adornUrl('/biz/pdbaidudata/delete'),
+            url: this.$http.adornUrl('/biz/tran/delete'),
             method: 'post',
             data: this.$http.adornData(userIds, false)
           }).then(({data}) => {
@@ -539,34 +539,8 @@
 
       //导出
       down (){
-        this.$http({
-          url: this.$http.adornUrl('/biz/tran/po/list'),
-          method: 'get',
-          params: this.$http.adornParams({
-            'pageNum': this.pageIndex,
-            'pageSize': this.pageSize,
-            'enterTime': this.dataForm.startTime||'',
-            'outFactoryTime': this.dataForm.endTime||'',
-            'carNum': this.dataForm.startTime,
-            'materialsName': this.dataForm.materialsName,
-            'doorPostName': this.dataForm.doorPostName,
-            'poundRoom': this.dataForm.poundRoom,
-            'containerNum': this.dataForm.containerNum,
-            'tranType': this.dataForm.tranType,
-            'emissionStand': this.dataForm.emissionStand,
-            'fuelType': this.dataForm.fuelType,
-
-          })
-        }).then(({data}) => {
-          console.log(data)
-          // if (data && data.code === 10000) {
-          //   this.dataList = data.data
-          //   this.totalPage = data.total
-          // } else {
-          //   this.dataList = []
-          //   this.totalPage = 0
-          // }
-        })
+        var url='/jinding/po/list?pageNum='+this.pageIndex+'&pageSize='+this.pageSize+'&enterTime='+this.dataForm.enterTime+'&outFactoryTime='+this.dataForm.outFactoryTime+ '&carNum='+this.dataForm.carNum+'&materialsName='+this.dataForm.materialsName+ '&doorPostName='+this.dataForm.doorPostName+'&poundRoom='+this.dataForm.poundRoom+'&containerNum='+ this.dataForm.containerNum+'&tranType='+this.dataForm.tranType+'&emissionStand='+this.dataForm.emissionStand+ '&fuelType='+this.dataForm.fuelType;
+        window.open(this.$http.adornUrl(url));
       }
     }
   }

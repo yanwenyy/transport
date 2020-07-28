@@ -38,7 +38,7 @@
       </el-form-item>
       <el-form-item label="进厂照片">
       <div class="inline-block box-img">
-        <div class="inline-block box-img" v-if="dataForm.enterImg!=''">
+        <div class="inline-block box-img" v-if="dataForm.enterImg&&dataForm.enterImg!=''">
           <div  v-for="item in dataForm.enterImg" class="inline-block img-list-div">
             <el-image class="look-img" title="点击查看大图"
                       :src="item.indexOf('http')!=-1?item:imgUrlfront+item" :preview-src-list="srcList" >
@@ -60,7 +60,7 @@
       </div>
     </el-form-item>
       <el-form-item label="出厂照片">
-        <div class="inline-block box-img" v-if="dataForm.outImg!=''">
+        <div class="inline-block box-img" v-if="dataForm.outImg&&dataForm.outImg!=''">
           <div  v-for="item in dataForm.outImg" class="inline-block img-list-div">
             <el-image class="look-img" title="点击查看大图"
                       :src="item.indexOf('http')!=-1?item:imgUrlfront+item" :preview-src-list="srcList" >
@@ -115,13 +115,13 @@
       </el-form-item>
 
       <el-form-item label="随车清单">
-        <div class="inline-block box-img" v-if="dataForm.carCheckList!=''">
+        <div class="inline-block box-img" v-if="dataForm.carCheckList&&dataForm.carCheckList!=''">
           <el-image class="look-img" title="点击查看大图"
                     :src="dataForm.carCheckList.indexOf('http')!=-1?dataForm.carCheckList:imgUrlfront+dataForm.carCheckList" :preview-src-list="srcList" >
           </el-image>
           <i class="el-icon-error box-img-del" @click="dataForm.carCheckList=''"></i>
         </div>
-        <div class="inline-block box-img"  v-if="dataForm.carCheckList==''">
+        <div class="inline-block box-img"  v-if="dataForm.carCheckList==''||!dataForm.carCheckList">
           <el-upload
             :show-file-list="!dataForm.id&& dataForm.carCheckList==''"
             :headers="{'token':token}"
@@ -136,13 +136,13 @@
         </div>
       </el-form-item>
       <el-form-item label="行驶证">
-        <div class="inline-block box-img" v-if="dataForm.drivinglLicense!=''">
+        <div class="inline-block box-img" v-if="dataForm.drivinglLicense&&dataForm.drivinglLicense!=''">
           <el-image class="look-img" title="点击查看大图"
                     :src="dataForm.drivinglLicense.indexOf('http')!=-1?dataForm.drivinglLicense:imgUrlfront+dataForm.drivinglLicense" :preview-src-list="srcList">
           </el-image>
           <i class="el-icon-error box-img-del" @click="dataForm.drivinglLicense=''"></i>
         </div>
-        <div class="inline-block box-img" v-if="dataForm.drivinglLicense==''">
+        <div class="inline-block box-img" v-if="dataForm.drivinglLicense==''||!dataForm.drivinglLicense">
           <el-upload
             :show-file-list="!dataForm.id && dataForm.drivinglLicense==''"
             :headers="{'token':token}"
@@ -319,11 +319,11 @@
           }],
         ysfs:[
           {
-            value: "1",
+            value: "0",
             label: '铁路'
           },
           {
-            value:"0",
+            value:"1",
             label: '公路'
           }
         ],
