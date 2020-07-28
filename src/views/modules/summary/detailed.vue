@@ -1,28 +1,13 @@
 <template>
   <div class="mod-user">
-    <el-form :inline="true" :model="dataForm" @keyup.enter.native="getDataList()">
+    <el-tabs v-model="activeName" type="card" @tab-click="handleClick">
+      <el-tab-pane label="物料名称" name="materials"></el-tab-pane>
+      <el-tab-pane label="运输方式" name="trantype"></el-tab-pane>
+      <el-tab-pane label="燃油种类" name="fueltype"></el-tab-pane>
+    </el-tabs>
+    <el-form v-if="this.activeName=='materials'" :inline="true" :model="dataForm" @keyup.enter.native="getDataList()">
       <el-form-item label="物料名称:">
         <el-input v-model="dataForm.materialsName" placeholder="物料名称" clearable></el-input>
-      </el-form-item>
-      <el-form-item label="运输方式:">
-        <el-select clearable  v-model="dataForm.tranType" placeholder="请选择">
-          <el-option
-            v-for="item in ysfs"
-            :key="item.value"
-            :label="item.label"
-            :value="item.value">
-          </el-option>
-        </el-select>
-      </el-form-item>
-      <el-form-item label="燃油种类:">
-        <el-select clearable  v-model="dataForm.fuelType" placeholder="请选择">
-          <el-option
-            v-for="item in ryzl"
-            :key="item.value"
-            :label="item.label"
-            :value="item.value">
-          </el-option>
-        </el-select>
       </el-form-item>
       <el-form-item>
         <el-button @click="getDataList()">查询</el-button>
@@ -42,23 +27,24 @@
         label="ID">
       </el-table-column>
       <el-table-column
-        prop="materialsName"
+        prop="type"
         align="center"
-        label="物料名称">
+        label="名称">
       </el-table-column>
       <el-table-column
-        prop="carWeigh"
+        prop="weigh"
         header-align="center"
         align="center"
         label="重量">
       </el-table-column>
       <el-table-column
+        prop="car"
         header-align="center"
         align="center"
         label="车辆数">
       </el-table-column>
     </el-table>
-    <el-pagination
+    <el-pagination v-if="this.activeName=='materials'"
       @size-change="sizeChangeHandle"
       @current-change="currentChangeHandle"
       :current-page="pageIndex"
@@ -79,6 +65,7 @@
           dayTime: '',
           materialsName:''
         },
+        activeName: 'materials',
         dataList: [],
         pageIndex: 1,
         pageSize: 10,
@@ -86,34 +73,6 @@
         dataListLoading: false,
         dataListSelections: [],
         addOrUpdateVisible: false,
-        ryzl:[
-          {
-            value: '柴油',
-            label: '柴油'
-          },
-          {
-            value: '天然气',
-            label: '天然气'
-          },
-          {
-            value: '纯电动',
-            label: '纯电动'
-          },
-          {
-            value: '油电混动',
-            label: '油电混动'
-          },
-        ],
-        ysfs:[
-          {
-            value: '0',
-            label: '铁路'
-          },
-          {
-            value: '1',
-            label: '公路'
-          }
-        ]
       }
     },
     components: {
@@ -126,15 +85,12 @@
       getDataList () {
         this.dataListLoading = true;
         this.$http({
-          url: this.$http.adornUrl('/jinding/sum/list'),
+          url: this.$http.adornUrl('/jinding/'+this.activeName+'/list'),
           method: 'get',
-          params: this.$http.adornParams({
+          params: this.activeName=='materials'?this.$http.adornParams({
             'pageNum': this.pageIndex,
             'pageSize': this.pageSize,
-            'monthTime': this.dataForm.monthTime||'',
-            'dayTime': this.dataForm.dayTime||'',
-            'materialsName': this.dataForm.materialsName
-          })
+          }):''
         }).then(({data}) => {
           if (data && data.code === 10000) {
             this.dataList = data.data
@@ -168,6 +124,9 @@
           this.$refs.addOrUpdate.init(id)
         })
       },
+      handleClick(tab, event) {
+        this.getDataList();
+      }
     }
   }
 </script>
