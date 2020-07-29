@@ -61,8 +61,6 @@
     data () {
       return {
         dataForm: {
-          monthTime: '',
-          dayTime: '',
           materialsName:''
         },
         activeName: 'materials',
@@ -90,6 +88,7 @@
           params: this.activeName=='materials'?this.$http.adornParams({
             'pageNum': this.pageIndex,
             'pageSize': this.pageSize,
+            'materialsName':this.dataForm.materialsName
           }):''
         }).then(({data}) => {
           if (data && data.code === 10000) {
