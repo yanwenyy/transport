@@ -129,8 +129,7 @@
             :on-success="handleChange"
             :on-error="handleChange"
             list-type="picture-card"
-            :on-remove="handleRemove"
-            :disabled="dataForm.carCheckList!=''">
+            :on-remove="handleRemove">
             <i class="el-icon-plus"></i>
           </el-upload>
         </div>
@@ -150,9 +149,7 @@
             :on-success="handleChange2"
             :on-error="handleChange2"
             list-type="picture-card"
-            :on-remove="handleRemove2"
-            :disabled="dataForm.drivinglLicense!=''"
-          >
+            :on-remove="handleRemove2">
             <i class="el-icon-plus"></i>
           </el-upload>
         </div>
@@ -369,12 +366,12 @@
                 this.dataForm.tranType = data.data.tranType;
                 this.dataForm.transportUnit = data.data.transportUnit;
                 this.dataForm.srcList=this.dataForm.enterImg.concat(this.dataForm.outImg);
-                this.dataForm.srcList.push(this.dataForm.carCheckList);
-                this.dataForm.srcList.push(this.dataForm.drivinglLicense);
-                for(var i in this.dataForm.srcList){
-                  this.dataForm.srcList[i]=this.dataForm.srcList[i].indexOf('http')!=-1?this.dataForm.srcList[i]:this.imgUrlfront+this.dataForm.srcList[i]
+                this.dataForm.carCheckList&&this.dataForm.srcList.push(this.dataForm.carCheckList);
+                this.dataForm.drivinglLicense&&this.dataForm.srcList.push(this.dataForm.drivinglLicense);
+                for(var i=0;i< this.dataForm.srcList.length;i++){
+                  var v=this.dataForm.srcList[i];
+                  v=(v.indexOf('http')!=-1)?v:this.imgUrlfront+v;
                 }
-                console.log(this.dataForm.srcList)
               }
             })
           }else{

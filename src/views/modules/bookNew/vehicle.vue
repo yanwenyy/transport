@@ -434,15 +434,17 @@
     methods: {
       // 获取数据列表
       getDataList () {
-        this.dataListLoading = true
+        this.dataListLoading = true;
         this.$http({
           url: this.$http.adornUrl('/jinding/tran/list'),
           method: 'get',
           params: this.$http.adornParams({
             'pageNum': this.pageIndex,
             'pageSize': this.pageSize,
-            'enterTime': this.dataForm.enterTime||'',
-            'outFactoryTime': this.dataForm.outFactoryTime||'',
+            'enterTimeStart': this.dataForm.enterTime?this.dataForm.enterTime[0]: '',
+            'enterTimeEnd': this.dataForm.enterTime?this.dataForm.enterTime[1] :'',
+            'outFactoryTimeStart': this.dataForm.outFactoryTime?this.dataForm.outFactoryTime[0]:'',
+            'outFactoryTimeEnd': this.dataForm.outFactoryTime?this.dataForm.outFactoryTime[1]:'',
             'carNum': this.dataForm.carNum,
             'materialsName': this.dataForm.materialsName,
             'doorPostName': this.dataForm.doorPostName,

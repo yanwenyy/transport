@@ -46,8 +46,7 @@
             :on-success="handleChange"
             :on-error="handleChange"
             list-type="picture-card"
-            :on-remove="handleRemove"
-            :disabled="dataForm.carCheckList!=''">
+            :on-remove="handleRemove">
             <i class="el-icon-plus"></i>
           </el-upload>
         </div>
@@ -67,9 +66,7 @@
             :on-success="handleChange2"
             :on-error="handleChange2"
             list-type="picture-card"
-            :on-remove="handleRemove2"
-            :disabled="dataForm.drivinglLicense!=''"
-            >
+            :on-remove="handleRemove2">
             <i class="el-icon-plus"></i>
           </el-upload>
         </div>
