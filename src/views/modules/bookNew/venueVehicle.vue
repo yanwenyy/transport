@@ -80,14 +80,14 @@
         align="center"
         label="随车清单">
         <template slot-scope="scope">
-          <img class="table-list-img" :src="scope.row.carCheckList&&scope.row.carCheckList.indexOf('http')!=-1?scope.row.carCheckList:scope.row.carCheckList?imgUrlfront+scope.row.carCheckList:''" alt="">
+          <img  @click="preImg(scope.row.carCheckList&&scope.row.carCheckList.indexOf('http')!=-1?scope.row.carCheckList:imgUrlfront+scope.row.carCheckList)" class="table-list-img" :src="scope.row.carCheckList&&scope.row.carCheckList.indexOf('http')!=-1?scope.row.carCheckList:scope.row.carCheckList?imgUrlfront+scope.row.carCheckList:''" alt="">
         </template>
       </el-table-column>
       <el-table-column
         align="center"
         label="行驶证">
         <template slot-scope="scope">
-          <img class="table-list-img" :src="scope.row.drivinglLicense&&scope.row.drivinglLicense.indexOf('http')!=-1?scope.row.drivinglLicense:scope.row.drivinglLicense?imgUrlfront+scope.row.drivinglLicense:''" alt="">
+          <img @click="preImg(scope.row.drivinglLicense&&scope.row.drivinglLicense.indexOf('http')!=-1?scope.row.drivinglLicense:imgUrlfront+scope.row.drivinglLicense)" class="table-list-img" :src="scope.row.drivinglLicense&&scope.row.drivinglLicense.indexOf('http')!=-1?scope.row.drivinglLicense:scope.row.drivinglLicense?imgUrlfront+scope.row.drivinglLicense:''" alt="">
         </template>
       </el-table-column>
       <el-table-column
@@ -113,11 +113,13 @@
     </el-pagination>
     <!-- 弹窗, 新增 / 修改 -->
     <add-or-update v-if="addOrUpdateVisible" ref="addOrUpdate" @refreshDataList="getDataList"></add-or-update>
+    <ImgPre v-if="ImgPreVisible"  ref="preImgList" @refreshClose="imgClose"></ImgPre>
   </div>
 </template>
 
 <script>
   import AddOrUpdate from './venueVehicle-add-or-update'
+  import ImgPre from './img-pre'
   export default {
     data () {
       return {
@@ -134,10 +136,12 @@
         dataListLoading: false,
         dataListSelections: [],
         addOrUpdateVisible: false,
+        ImgPreVisible:false,
       }
     },
     components: {
-      AddOrUpdate
+      AddOrUpdate,
+      ImgPre
     },
     activated () {
       this.getDataList();
@@ -189,6 +193,16 @@
         this.$nextTick(() => {
           this.$refs.addOrUpdate.init(id)
         })
+      },
+      //图片预览
+      preImg(src){
+        this.ImgPreVisible = true;
+        this.$nextTick(() => {
+          this.$refs.preImgList.init(src)
+        })
+      },
+      imgClose(){
+        this.ImgPreVisible = false;
       },
       // 删除
       deleteHandle (id) {

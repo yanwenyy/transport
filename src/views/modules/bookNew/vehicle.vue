@@ -40,10 +40,16 @@
           </el-option>
         </el-select>
       </el-form-item>
+      <el-form-item v-show="searchMore" label="车牌号:">
+        <el-input v-model="dataForm.carNum" placeholder="车牌号" clearable></el-input>
+      </el-form-item>
+      <el-form-item v-show="searchMore" label="运输货物名称:">
+        <el-input v-model="dataForm.materialsName" placeholder="运输货物名称" clearable></el-input>
+      </el-form-item>
       <el-form-item v-show="searchMore" label="进厂时间:">
         <el-date-picker
           v-model="dataForm.enterTime"
-          type="datetime"
+          type="datetimerange"
           value-format="yyyy-MM-dd HH:mm:ss"
           placeholder="选择日期">
         </el-date-picker>
@@ -51,19 +57,15 @@
       <el-form-item v-show="searchMore" label="出厂时间:">
         <el-date-picker
           v-model="dataForm.outFactoryTime"
-          type="datetime"
+          type="datetimerange"
           value-format="yyyy-MM-dd HH:mm:ss"
           placeholder="选择日期">
         </el-date-picker>
       </el-form-item>
-      <el-form-item v-show="searchMore" label="车牌号:">
-        <el-input v-model="dataForm.carNum" placeholder="车牌号" clearable></el-input>
-      </el-form-item>
-      <el-form-item v-show="searchMore" label="运输货物名称:">
-        <el-input v-model="dataForm.materialsName" placeholder="运输货物名称" clearable></el-input>
-      </el-form-item>
-      <el-form-item>
-        <span class="showMore" @click="searchMore=!searchMore">{{searchMore?'收起':'显示更多'}}</span><el-button @click="getDataList()">查询</el-button>
+
+      <span class="showMore" @click="searchMore=!searchMore">{{searchMore?'收起':'显示更多'}}</span>
+      <el-form-item style="text-align: right;display: block">
+        <el-button @click="getDataList()">查询</el-button>
         <el-button v-if="" type="primary" @click="addOrUpdateHandle()">新增</el-button>
         <el-upload
           class="inline-block"
@@ -88,7 +90,8 @@
           </template>
           <el-button slot="reference">批量隐藏列</el-button>
         </el-popover>
-        <!--<el-button v-if="isAuth('sys:user:delete')" type="danger" @click="deleteHandle()" :disabled="dataListSelections.length <= 0">批量删除</el-button>-->
+        <!--<i class="el-icon-refresh" @click="reload()"></i>-->
+        <el-button type="danger" @click="reload()">刷新</el-button>
       </el-form-item>
     </el-form>
 
@@ -143,7 +146,7 @@
         align="center"
         label="进厂照片">
         <template slot-scope="scope">
-          <img v-for="item in (scope.row.enterImg?scope.row.enterImg.split(','):[])" class="table-list-img" :src="item&&item.indexOf('http')!=-1?item:imgUrlfront+item" alt="">
+          <img @click="preImg(item&&item.indexOf('http')!=-1?item:imgUrlfront+item)" v-for="item in (scope.row.enterImg?scope.row.enterImg.split(','):[])" class="table-list-img" :src="item&&item.indexOf('http')!=-1?item:imgUrlfront+item" alt="">
         </template>
       </el-table-column>
       <el-table-column
@@ -152,7 +155,7 @@
         align="center"
         label="出厂照片">
         <template slot-scope="scope">
-          <img v-for="item in (scope.row.outImg?scope.row.outImg.split(','):[])" class="table-list-img" :src="(item&&item.indexOf('http')!=-1?item:imgUrlfront+item)" alt="">
+          <img @click="preImg(item&&item.indexOf('http')!=-1?item:imgUrlfront+item)" v-for="item in (scope.row.outImg?scope.row.outImg.split(','):[])" class="table-list-img" :src="(item&&item.indexOf('http')!=-1?item:imgUrlfront+item)" alt="">
         </template>
       </el-table-column>
       <el-table-column
@@ -210,7 +213,7 @@
         align="center"
         label="随车清单">
         <template slot-scope="scope">
-          <img class="table-list-img" :src="(scope.row.carCheckList&&scope.row.carCheckList.indexOf('http')!=-1?scope.row.carCheckList:scope.row.carCheckList?imgUrlfront+scope.row.carCheckList:'')" alt="">
+          <img  @click="preImg(scope.row.carCheckList&&scope.row.carCheckList.indexOf('http')!=-1?scope.row.carCheckList:imgUrlfront+scope.row.carCheckList)" class="table-list-img" :src="(scope.row.carCheckList&&scope.row.carCheckList.indexOf('http')!=-1?scope.row.carCheckList:scope.row.carCheckList?imgUrlfront+scope.row.carCheckList:'')" alt="">
         </template>
       </el-table-column>
       <el-table-column
@@ -219,7 +222,7 @@
         align="center"
         label="行驶证">
         <template slot-scope="scope">
-          <img class="table-list-img" :src="(scope.row.drivinglLicense&&scope.row.drivinglLicense.indexOf('http')!=-1?scope.row.drivinglLicense:scope.row.drivinglLicense?imgUrlfront+scope.row.drivinglLicense:'')" alt="">
+          <img @click="preImg(scope.row.drivinglLicense&&scope.row.drivinglLicense.indexOf('http')!=-1?scope.row.drivinglLicense:imgUrlfront+scope.row.drivinglLicense)" class="table-list-img" :src="(scope.row.drivinglLicense&&scope.row.drivinglLicense.indexOf('http')!=-1?scope.row.drivinglLicense:scope.row.drivinglLicense?imgUrlfront+scope.row.drivinglLicense:'')" alt="">
         </template>
       </el-table-column>
       <el-table-column
@@ -284,7 +287,7 @@
         v-if="checkedCities.indexOf('运输方式')!=-1"
         header-align="center"
         align="center"
-        label="运输方式（铁路/公路）">
+        label="运输方式">
         <template slot-scope="scope">
           {{scope.row.tranType==1?'公路':'铁路'}}
         </template>
@@ -320,6 +323,7 @@
     </el-pagination>
     <!-- 弹窗, 新增 / 修改 -->
     <add-or-update v-if="addOrUpdateVisible" ref="addOrUpdate" @refreshDataList="getDataList"></add-or-update>
+    <ImgPre v-if="ImgPreVisible"  ref="preImgList" @refreshClose="imgClose"></ImgPre>
   </div>
 </template>
 
@@ -327,7 +331,8 @@
   const cityOptions = ['ID', '进厂时间', '计量时间', '退卡时间','出厂时间','进厂照片','出厂照片','门岗名称','磅房名称',
     '车牌号','注册日期','车辆识别代号','发动机号码','燃油种类','随车清单','行驶证','排放阶段','供应商',
   '物料编码','物料名称','计量单号','毛重','皮重','净重','集装箱号','运输方式','运输单位'];
-  import AddOrUpdate from './vehicle-add-or-update'
+  import AddOrUpdate from './vehicle-add-or-update';
+  import ImgPre from './img-pre'
   export default {
     data () {
       return {
@@ -353,6 +358,7 @@
         dataListLoading: false,
         dataListSelections: [],
         addOrUpdateVisible: false,
+        ImgPreVisible:false,
         checkAll: false,
         checkedCities: cityOptions,
         cities: cityOptions,
@@ -379,29 +385,11 @@
         ],
         pfbz: [
           {
-          value: '国 0:0',
-          label: '国 0:0'
-        }, {
-          value: '国 1:1',
-          label: '国 1:1'
-        }, {
-          value: '国 2:2',
-          label: '国 2:2'
-        }, {
-          value: '国 3:3',
-          label: '国 3:3'
-        }, {
-          value: '国 4:4',
-          label: '国 4:4'
-        }, {
-          value: '国 5:5',
-          label: '国 5:5'
-        }, {
-          value: '国 6:6',
-          label: '国 6:6'
-        }, {
-          value: '电动:D',
-          label: '电动:D'
+          value: '国五',
+          label: '国五'
+          }, {
+          value: '国六',
+          label: '国六'
         }],
         ysfs:[
           {
@@ -412,11 +400,31 @@
             value: '1',
             label: '公路'
           }
-        ]
+        ],
+        pickerOptionsStart: {
+          disabledDate: time => {
+            let endDateVal = this.dataForm.outFactoryTime;
+            if (endDateVal) {
+              return time.getTime() > new Date(endDateVal).getTime();
+            }
+          }
+        },
+        pickerOptionsEnd: {
+          disabledDate: time => {
+            let beginDateVal = this.dataForm.enterTime;
+            if (beginDateVal) {
+              return (
+                time.getTime() <
+                new Date(beginDateVal).getTime()
+              );
+            }
+          },
+        },
       }
     },
     components: {
-      AddOrUpdate
+      AddOrUpdate,
+      ImgPre
     },
     activated () {
       this.getDataList();
@@ -477,6 +485,16 @@
         this.$nextTick(() => {
           this.$refs.addOrUpdate.init(id,look)
         })
+      },
+      //图片预览
+      preImg(src){
+        this.ImgPreVisible = true;
+        this.$nextTick(() => {
+          this.$refs.preImgList.init(src)
+        })
+      },
+      imgClose(){
+        this.ImgPreVisible = false;
       },
       // 删除
       deleteHandle (id) {
@@ -541,6 +559,12 @@
       down (){
         var url='/jinding/po/list?pageNum='+this.pageIndex+'&pageSize='+this.pageSize+'&enterTime='+this.dataForm.enterTime+'&outFactoryTime='+this.dataForm.outFactoryTime+ '&carNum='+this.dataForm.carNum+'&materialsName='+this.dataForm.materialsName+ '&doorPostName='+this.dataForm.doorPostName+'&poundRoom='+this.dataForm.poundRoom+'&containerNum='+ this.dataForm.containerNum+'&tranType='+this.dataForm.tranType+'&emissionStand='+this.dataForm.emissionStand+ '&fuelType='+this.dataForm.fuelType;
         window.open(this.$http.adornUrl(url));
+      },
+
+      //刷新页面
+      reload(){
+        this.pageIndex = 1
+        this.getDataList()
       }
     }
   }
@@ -561,6 +585,8 @@
     color:cornflowerblue;
     cursor: pointer;
     margin-right: 30px;
+    display: inline-block;
+    margin-top: 10px;
   }
   .table-list-img{
     margin-bottom: 10px;

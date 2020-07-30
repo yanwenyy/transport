@@ -74,29 +74,11 @@
           engineNum:''
         },
         options: [{
-          value: '国 0:0',
-          label: '国 0:0'
+          value: '国五',
+          label: '国五'
         }, {
-          value: '国 1:1',
-          label: '国 1:1'
-        }, {
-          value: '国 2:2',
-          label: '国 2:2'
-        }, {
-          value: '国 3:3',
-          label: '国 3:3'
-        }, {
-          value: '国 4:4',
-          label: '国 4:4'
-        }, {
-          value: '国 5:5',
-          label: '国 5:5'
-        }, {
-          value: '国 6:6',
-          label: '国 6:6'
-        }, {
-          value: '电动:D',
-          label: '电动:D'
+          value: '国六',
+          label: '国六'
         }],
         value: '',
         dataRule: {
