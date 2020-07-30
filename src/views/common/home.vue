@@ -8,6 +8,9 @@
         <div>金鼎清洁运输管控平台</div>
       </div>
     </div>
+    <div class="aobo-logo">
+      <img src="../../../static/img/aobao.png" alt="">
+    </div>
   </div>
 </template>
 
@@ -65,6 +68,15 @@
   }
   .logo-home{
     width: 10%;
+    height: auto;
+  }
+  .aobo-logo{
+    position: absolute;
+    bottom:8%;
+    right:5%;
+  }
+  .aobo-logo>img{
+    width: 100px;
     height: auto;
   }
 </style>
