@@ -91,7 +91,7 @@
           <el-button slot="reference">批量隐藏列</el-button>
         </el-popover>
         <!--<i class="el-icon-refresh" @click="reload()"></i>-->
-        <el-button type="danger" @click="reload()">刷新</el-button>
+        <!--<el-button type="danger" @click="reload()">刷新</el-button>-->
       </el-form-item>
     </el-form>
 
@@ -185,9 +185,9 @@
         header-align="center"
         align="center"
         label="注册日期">
-        <!--<template slot-scope="scope">-->
-        <!--{{ (scope.row.effective).toFixed(2)*100+"%"}}-->
-        <!--</template>-->
+        <template slot-scope="scope">
+        {{ scope.row.registTime&&scope.row.registTime.split(" ")[0]}}
+        </template>
       </el-table-column>
       <el-table-column
         v-if="checkedCities.indexOf('车辆识别代号')!=-1"
@@ -227,7 +227,7 @@
       </el-table-column>
       <el-table-column
         v-if="checkedCities.indexOf('排放阶段')!=-1"
-        prop="emissionStand"
+        prop="doorEmissionStand"
         header-align="center"
         align="center"
         label="排放阶段">
@@ -333,6 +333,7 @@
   '物料编码','物料名称','计量单号','毛重','皮重','净重','集装箱号','运输方式','运输单位'];
   import AddOrUpdate from './vehicle-add-or-update';
   import ImgPre from './img-pre'
+  import {PxSocket,randomString} from '@/utils'
   export default {
     data () {
       return {
@@ -365,6 +366,7 @@
         isIndeterminate: true,
         imgUrlfront:'',
         token:'',
+        ws:'',
         ryzl:[
           {
             value: '柴油',
@@ -429,7 +431,18 @@
     activated () {
       this.getDataList();
       this.imgUrlfront=this.$http.adornUrl('/jinding/showImg/');
-      this.token=this.$cookie.get('token')
+      this.token=this.$cookie.get('token');
+      var num="_"+randomString();
+      this.ws=new PxSocket({
+        url:this.$http.wsUrl('jinding'+num),
+        name:'getData',
+        data:'jinding'+num,
+        succ:this.getDataList
+      });
+      this.ws.connect();
+    },
+    beforeDestroy(){
+      this.ws.close();
     },
     methods: {
       // 获取数据列表

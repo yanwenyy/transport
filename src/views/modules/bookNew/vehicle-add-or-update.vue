@@ -354,7 +354,7 @@
                 this.dataForm.fuelType = data.data.fuelType;
                 this.dataForm.carCheckList = data.data.carCheckList;
                 this.dataForm.drivinglLicense = data.data.drivinglLicense;
-                this.dataForm.emissionStand = data.data.emissionStand;
+                this.dataForm.emissionStand = data.data.doorEmissionStand;
                 this.dataForm.clientName = data.data.clientName;
                 this.dataForm.materialsNum = data.data.materialsNum;
                 this.dataForm.materialsName = data.data.materialsName;
@@ -365,13 +365,16 @@
                 this.dataForm.containerNum = data.data.containerNum;
                 this.dataForm.tranType = data.data.tranType;
                 this.dataForm.transportUnit = data.data.transportUnit;
-                this.dataForm.srcList=this.dataForm.enterImg.concat(this.dataForm.outImg);
-                this.dataForm.carCheckList&&this.dataForm.srcList.push(this.dataForm.carCheckList);
-                this.dataForm.drivinglLicense&&this.dataForm.srcList.push(this.dataForm.drivinglLicense);
-                for(var i=0;i< this.dataForm.srcList.length;i++){
-                  var v=this.dataForm.srcList[i];
-                  v=(v.indexOf('http')!=-1)?v:this.imgUrlfront+v;
+                var list=this.dataForm.enterImg.concat(this.dataForm.outImg);
+                this.dataForm.carCheckList&&list.push(this.dataForm.carCheckList);
+                this.dataForm.drivinglLicense&&list.push(this.dataForm.drivinglLicense);
+                var i=0,len=list.length;
+                for(;i< len;i++){
+                  var v=list[i];
+                  list[i]=(list[i].indexOf('http')!=-1)?list[i]:this.imgUrlfront+list[i];
                 }
+                this.srcList=list;
+                // console.log(this.srcList)
               }
             })
           }else{
