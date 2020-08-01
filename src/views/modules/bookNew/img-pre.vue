@@ -6,7 +6,19 @@
         <i @click="small" class="el-icon-zoom-out">缩小</i>
         <i @click="close" class="el-icon-circle-close">关闭</i>
       </div>
-      <img ref="bigImage" @click="close" :src="src" alt="">
+      <img @mousewheel="rollImg(this)" class="show-img" ref="bigImage" @click="close" :src="src" alt="">
+      <!--<div class="img-box">-->
+        <!--<div class="img-btn">-->
+          <!--<i @click="transformImg" class="el-icon-refresh-right">旋转</i>-->
+          <!--<i @click="big" class="el-icon-zoom-in">放大</i>-->
+          <!--<i @click="small" class="el-icon-zoom-out">缩小</i>-->
+          <!--<i @click="close" class="el-icon-circle-close">关闭</i>-->
+        <!--</div>-->
+        <!--<div  @mousewheel="rollImg(this)" class="img-box-show">-->
+          <!--<img class="show-img" ref="bigImage" @click="close" :src="src" alt="">-->
+        <!--</div>-->
+      <!--</div>-->
+
       <!--<img @mousewheel="rollImg(this)" ref="bigImage" @click="close" :src="src" alt="">-->
     </div>
 </template>
@@ -23,9 +35,13 @@
         },
         methods:{
           init (src) {
+            document.body.style.overflow='hidden';
+            document.body.style.height='100%';
             this.src=src;
           },
           close(){
+            document.body.style.overflow='auto';
+            document.body.style.height='auto';
             this.$emit('refreshClose');
             this.$refs.bigImage.style.maxWidth="70%";
           },
@@ -39,13 +55,17 @@
             var zoom = parseInt(this.$refs.bigImage.style.zoom) || 100;
             if (delta > 0) {
               // 向上滚
-              zoom += event.wheelDelta / 12;
-              this.$refs.bigImage.style.zoom = zoom + "%";
+              // zoom += event.wheelDelta / 12;
+              // this.$refs.bigImage.style.zoom = zoom + "%";
+              this.zoom += 0.1;
+              this.$refs.bigImage.style.transform = "rotate("+this.current+"deg)scale("+this.zoom+","+this.zoom+")";
 
             } else if (delta < 0) {
               // 向下滚
-              zoom += event.wheelDelta / 12;
-              this.$refs.bigImage.style.zoom = zoom + "%";
+              // zoom += event.wheelDelta / 12;
+              // this.$refs.bigImage.style.zoom = zoom + "%";
+              this.zoom -= 0.1;
+              this.$refs.bigImage.style.transform = "rotate("+this.current+"deg)scale("+this.zoom+","+this.zoom+")";
             }
             // if (zoom >= 100 && zoom <250) {
             //   this.$refs.bigImage.style.zoom = zoom + "%";
@@ -88,10 +108,11 @@
     padding:70px 0;
     align-items: center;
   }
-  .img-model>img{
-    max-width: 60%;
+  .show-img{
+    max-width: 70%;
     width: auto;
     height: auto;
+    z-index: 999999;
   }
   .img-btn{
     width: 100%;
@@ -111,5 +132,25 @@
     font-size: 24px;
     margin-right: 20px;
     cursor: pointer;
+  }
+  .img-box{
+    width: 60%;
+    height: 80%;
+    background: #fff;
+    border-radius: 10px;
+    position: relative;
+    margin: auto;
+    padding:10px;
+    box-sizing: border-box;
+  }
+  .img-box-show{
+    width: 100%;
+    height: 100%;
+    box-sizing: border-box;
+    padding:10px;
+    position: absolute;
+    top:60px;
+    left:0;
+    overflow: auto;
   }
 </style>

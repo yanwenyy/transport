@@ -46,18 +46,34 @@
       <el-form-item v-show="searchMore" label="运输货物名称:">
         <el-input v-model="dataForm.materialsName" placeholder="运输货物名称" clearable></el-input>
       </el-form-item>
-      <el-form-item v-show="searchMore" label="进厂时间:">
+      <el-form-item v-show="searchMore" label="进厂开始时间:">
         <el-date-picker
-          v-model="dataForm.enterTime"
-          type="datetimerange"
+          v-model="dataForm.enterTimeStart"
+          type="datetime"
           value-format="yyyy-MM-dd HH:mm:ss"
           placeholder="选择日期">
         </el-date-picker>
       </el-form-item>
-      <el-form-item v-show="searchMore" label="出厂时间:">
+      <el-form-item v-show="searchMore" label="进厂结束时间:">
         <el-date-picker
-          v-model="dataForm.outFactoryTime"
-          type="datetimerange"
+          v-model="dataForm.enterTimeEnd"
+          type="datetime"
+          value-format="yyyy-MM-dd HH:mm:ss"
+          placeholder="选择日期">
+        </el-date-picker>
+      </el-form-item>
+      <el-form-item v-show="searchMore" label="出厂开始时间:">
+        <el-date-picker
+          v-model="dataForm.outFactoryTimeStart"
+          type="datetime"
+          value-format="yyyy-MM-dd HH:mm:ss"
+          placeholder="选择日期">
+        </el-date-picker>
+      </el-form-item>
+      <el-form-item v-show="searchMore" label="出厂结束时间:">
+        <el-date-picker
+          v-model="dataForm.outFactoryTimeEnd"
+          type="datetime"
           value-format="yyyy-MM-dd HH:mm:ss"
           placeholder="选择日期">
         </el-date-picker>
@@ -91,7 +107,7 @@
           <el-button slot="reference">批量隐藏列</el-button>
         </el-popover>
         <!--<i class="el-icon-refresh" @click="reload()"></i>-->
-        <!--<el-button type="danger" @click="reload()">刷新</el-button>-->
+        <el-button type="danger" @click="reload()">刷新</el-button>
       </el-form-item>
     </el-form>
 
@@ -146,7 +162,7 @@
         align="center"
         label="进厂照片">
         <template slot-scope="scope">
-          <img @click="preImg(item&&item.indexOf('http')!=-1?item:imgUrlfront+item)" v-for="item in (scope.row.enterImg?scope.row.enterImg.split(','):[])" class="table-list-img" :src="item&&item.indexOf('http')!=-1?item:imgUrlfront+item" alt="">
+          <img @click="preImg(item&&item.indexOf('http')!=-1?item:imgUrlfront+item)" v-for="item in (scope.row.enterImg?scope.row.enterImg.split(','):[])" class="table-list-img" :src="item&&item.indexOf('http')!=-1?item:imgUrlfront+item" alt=" ">
         </template>
       </el-table-column>
       <el-table-column
@@ -155,7 +171,7 @@
         align="center"
         label="出厂照片">
         <template slot-scope="scope">
-          <img @click="preImg(item&&item.indexOf('http')!=-1?item:imgUrlfront+item)" v-for="item in (scope.row.outImg?scope.row.outImg.split(','):[])" class="table-list-img" :src="(item&&item.indexOf('http')!=-1?item:imgUrlfront+item)" alt="">
+          <img @click="preImg(item&&item.indexOf('http')!=-1?item:imgUrlfront+item)" v-for="item in (scope.row.outImg?scope.row.outImg.split(','):[])" class="table-list-img" :src="(item&&item.indexOf('http')!=-1?item:imgUrlfront+item)" alt=" ">
         </template>
       </el-table-column>
       <el-table-column
@@ -213,7 +229,7 @@
         align="center"
         label="随车清单">
         <template slot-scope="scope">
-          <img  @click="preImg(scope.row.carCheckList&&scope.row.carCheckList.indexOf('http')!=-1?scope.row.carCheckList:imgUrlfront+scope.row.carCheckList)" class="table-list-img" :src="(scope.row.carCheckList&&scope.row.carCheckList.indexOf('http')!=-1?scope.row.carCheckList:scope.row.carCheckList?imgUrlfront+scope.row.carCheckList:'')" alt="">
+          <img  @click="preImg(scope.row.carCheckList&&scope.row.carCheckList.indexOf('http')!=-1?scope.row.carCheckList:imgUrlfront+scope.row.carCheckList)" class="table-list-img" v-if="scope.row.carCheckList" :src="(scope.row.carCheckList&&scope.row.carCheckList.indexOf('http')!=-1?scope.row.carCheckList:scope.row.carCheckList?imgUrlfront+scope.row.carCheckList:'')" alt=" ">
         </template>
       </el-table-column>
       <el-table-column
@@ -222,7 +238,7 @@
         align="center"
         label="行驶证">
         <template slot-scope="scope">
-          <img @click="preImg(scope.row.drivinglLicense&&scope.row.drivinglLicense.indexOf('http')!=-1?scope.row.drivinglLicense:imgUrlfront+scope.row.drivinglLicense)" class="table-list-img" :src="(scope.row.drivinglLicense&&scope.row.drivinglLicense.indexOf('http')!=-1?scope.row.drivinglLicense:scope.row.drivinglLicense?imgUrlfront+scope.row.drivinglLicense:'')" alt="">
+          <img @click="preImg(scope.row.drivinglLicense&&scope.row.drivinglLicense.indexOf('http')!=-1?scope.row.drivinglLicense:imgUrlfront+scope.row.drivinglLicense)" class="table-list-img" v-if="scope.row.drivinglLicense" :src="(scope.row.drivinglLicense&&scope.row.drivinglLicense.indexOf('http')!=-1?scope.row.drivinglLicense:scope.row.drivinglLicense?imgUrlfront+scope.row.drivinglLicense:'')" alt=" ">
         </template>
       </el-table-column>
       <el-table-column
@@ -338,8 +354,10 @@
     data () {
       return {
         dataForm: {
-          enterTime: '',
-          outFactoryTime: '',
+          enterTimeStart: '',
+          enterTimeEnd: '',
+          outFactoryTimeStart: '',
+          outFactoryTimeEnd: '',
           carNum:'',
           materialsName:'',
           doorPostName:'',
@@ -454,10 +472,10 @@
           params: this.$http.adornParams({
             'pageNum': this.pageIndex,
             'pageSize': this.pageSize,
-            'enterTimeStart': this.dataForm.enterTime?this.dataForm.enterTime[0]: '',
-            'enterTimeEnd': this.dataForm.enterTime?this.dataForm.enterTime[1] :'',
-            'outFactoryTimeStart': this.dataForm.outFactoryTime?this.dataForm.outFactoryTime[0]:'',
-            'outFactoryTimeEnd': this.dataForm.outFactoryTime?this.dataForm.outFactoryTime[1]:'',
+            'enterTimeStart': this.dataForm.enterTimeStart|| '',
+            'enterTimeEnd': this.dataForm.enterTimeEnd|| '',
+            'outFactoryTimeStart': this.dataForm.outFactoryTimeStart|| '',
+            'outFactoryTimeEnd': this.dataForm.outFactoryTimeEnd|| '',
             'carNum': this.dataForm.carNum,
             'materialsName': this.dataForm.materialsName,
             'doorPostName': this.dataForm.doorPostName,

@@ -7,32 +7,32 @@
       <el-form-item label="进厂时间">
         <el-date-picker
           v-model="dataForm.enterTime"
-          type="date"
-          value-format="yyyy-MM-dd"
+          type="datetime"
+          value-format="yyyy-MM-dd HH:mm:ss"
           placeholder="请选择时间">
         </el-date-picker>
       </el-form-item>
       <el-form-item label="计量时间">
         <el-date-picker
           v-model="dataForm.weighTime"
-          type="date"
-          value-format="yyyy-MM-dd"
+          type="datetime"
+          value-format="yyyy-MM-dd HH:mm:ss"
           placeholder="请选择时间">
         </el-date-picker>
       </el-form-item>
       <el-form-item label="退卡时间">
         <el-date-picker
           v-model="dataForm.checkOutTime"
-          type="date"
-          value-format="yyyy-MM-dd"
+          type="datetime"
+          value-format="yyyy-MM-dd HH:mm:ss"
           placeholder="请选择时间">
         </el-date-picker>
       </el-form-item>
       <el-form-item label="出厂时间">
         <el-date-picker
           v-model="dataForm.outFactoryTime"
-          type="date"
-          value-format="yyyy-MM-dd"
+          type="datetime"
+          value-format="yyyy-MM-dd HH:mm:ss"
           placeholder="请选择时间">
         </el-date-picker>
       </el-form-item>
@@ -417,16 +417,16 @@
               method: 'post',
               data: this.$http.adornData({
                 'id': this.dataForm.id || undefined,
-                'enterTime': !this.dataForm.id ? this.dataForm.enterTime+" 00:00:00":this.dataForm.enterTime,
-                'weighTime': !this.dataForm.id ? this.dataForm.weighTime+" 00:00:00":this.dataForm.weighTime,
-                'checkOutTime':!this.dataForm.id ?  this.dataForm.checkOutTime+" 00:00:00":this.dataForm.checkOutTime,
-                'outFactoryTime': !this.dataForm.id ? this.dataForm.outFactoryTime+" 00:00:00":this.dataForm.outFactoryTime,
+                'enterTime': this.dataForm.enterTime,
+                'weighTime': this.dataForm.weighTime,
+                'checkOutTime':this.dataForm.checkOutTime,
+                'outFactoryTime': this.dataForm.outFactoryTime,
                 'enterImg': this.dataForm.enterImg.join(","),
                 'outImg': this.dataForm.outImg.join(","),
                 'doorPostName': this.dataForm.doorPostName,
                 'poundRoom': this.dataForm.poundRoom,
                 'carNum': this.dataForm.carNum,
-                'registTime': !this.dataForm.id ? this.dataForm.registTime+" 00:00:00":this.dataForm.registTime,
+                'registTime': !this.dataForm.id ||this.dataForm.registTime.indexOf("00:00:00")==-1? this.dataForm.registTime+" 00:00:00":this.dataForm.registTime,
                 'vehicleNum': this.dataForm.vehicleNum,
                 'engineNum': this.dataForm.engineNum,
                 'fuelType': this.dataForm.fuelType,
