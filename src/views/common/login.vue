@@ -106,7 +106,7 @@
     right: 0;
     bottom: 0;
     left: 0;
-    background-color: rgba(38, 50, 56, .6);
+    /*background-color: rgba(38, 50, 56, .6);*/
     overflow: hidden;
     &:before {
       position: fixed;
@@ -137,12 +137,13 @@
     }
     .brand-info {
       margin: 220px 100px 0 90px;
-      color: #fff;
+      color: #000;
+      text-shadow:5px 2px 6px #fff;
     }
     .brand-info__text {
       margin:  0 0 22px 0;
-      font-size: 48px;
-      font-weight: 400;
+      font-size: 50px;
+      font-weight: bold;
       text-transform : uppercase;
     }
     .brand-info__intro {
@@ -153,12 +154,13 @@
     }
     .login-main {
       position: absolute;
-      top: 0;
-      right: 0;
-      padding: 150px 60px 180px;
+      top: 20%;
+      right: 5%;
+      padding: 50px;
       width: 470px;
-      min-height: 100%;
-      background-color: #fff;
+      height: 60%;
+      background-color: rgba(255,255,255,.4);
+      border-radius: 10px;
     }
     .login-title {
       font-size: 16px;

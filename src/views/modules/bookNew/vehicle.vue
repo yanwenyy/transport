@@ -83,16 +83,47 @@
       <el-form-item style="text-align: right;display: block">
         <el-button @click="getDataList()">查询</el-button>
         <el-button v-if="" type="primary" @click="addOrUpdateHandle()">新增</el-button>
-        <el-upload
-          class="inline-block"
-          :headers="{'token':token}"
-          :action="this.$http.adornUrl('/biz/tran/import/tran/car')"
-          :on-success="handleChange"
-          :on-error="handleChange"
-          :show-file-list="false"
-        >
-          <el-button type="warning">批量导入</el-button>
-        </el-upload>
+        <el-popover
+        placement="left"
+        width="400"
+        trigger="hover">
+          <template>
+            <div class="dr-notice-body">
+              <div class="dr-notice-list">
+                <div class="inline-block dr-notice-title">1.下载excel模板</div>
+                <a href="../../../../static/file/vehicle.xlsx" download="vehicle.xls">点击下载模板</a>
+              </div>
+              <div class="dr-notice-list">
+                <div class="inline-block dr-notice-title">2.上传编辑好的文件</div>
+                <el-upload
+                  class="inline-block"
+                  :headers="{'token':token}"
+                  :action="this.$http.adornUrl('/biz/tran/import/tran/car')"
+                  :on-success="handleChange"
+                  :on-error="handleChange"
+                  :show-file-list="false"
+                >
+                  <el-button type="warning">选择文件</el-button>
+                </el-upload>
+              </div>
+              <div class="dr-notice-warn">
+                <i class="el-icon-warning"></i>
+                注意:excel批量导入将覆盖询单内现有物料;上传文件类型仅限excel文件!
+              </div>
+            </div>
+          </template>
+          <el-button type="warning" slot="reference">批量导入</el-button>
+        </el-popover>
+        <!--<el-upload-->
+          <!--class="inline-block"-->
+          <!--:headers="{'token':token}"-->
+          <!--:action="this.$http.adornUrl('/biz/tran/import/tran/car')"-->
+          <!--:on-success="handleChange"-->
+          <!--:on-error="handleChange"-->
+          <!--:show-file-list="false"-->
+        <!--&gt;-->
+          <!--<el-button type="warning">批量导入</el-button>-->
+        <!--</el-upload>-->
         <el-button type="warning" @click="down">导出</el-button>
         <el-popover
           placement="right"
@@ -106,12 +137,13 @@
           </template>
           <el-button slot="reference">批量隐藏列</el-button>
         </el-popover>
-        <!--<i class="el-icon-refresh" @click="reload()"></i>-->
         <el-button type="danger" @click="reload()">刷新</el-button>
       </el-form-item>
     </el-form>
-
-    <el-table
+    <div v-if="dataList" @scroll="barScroll" class="elScrollbar">
+      <div :style="{width:(tabelWidth*2.2)+'px',height: '1px',lineHeight:'30px'}"></div>
+    </div>
+    <el-table ref="tableList"
       :data="dataList"
       border
       v-loading="dataListLoading"
@@ -202,7 +234,7 @@
         align="center"
         label="注册日期">
         <template slot-scope="scope">
-        {{ scope.row.registTime&&scope.row.registTime.split(" ")[0]}}
+          {{ scope.row.registTime&&scope.row.registTime.split(" ")[0]}}
         </template>
       </el-table-column>
       <el-table-column
@@ -384,6 +416,8 @@
         isIndeterminate: true,
         imgUrlfront:'',
         token:'',
+        tabelWidth:0,
+        minwidth:0,
         ws:'',
         ryzl:[
           {
@@ -458,6 +492,9 @@
         succ:this.getDataList
       });
       this.ws.connect();
+    },
+    mounted(){
+      this.tabelWidth=this.$refs.tableList.bodyWrapper.scrollWidth;
     },
     beforeDestroy(){
       this.ws.close();
@@ -598,6 +635,11 @@
       reload(){
         this.pageIndex = 1
         this.getDataList()
+      },
+
+      //自定义滚动条
+      barScroll(e){
+        this.$refs.tableList.bodyWrapper.scrollLeft =e.target.scrollLeft+10;
       }
     }
   }
@@ -623,5 +665,30 @@
   }
   .table-list-img{
     margin-bottom: 10px;
+  }
+  .elScrollbar{
+    width: 77%;
+    overflow-x: auto;
+    position: fixed;
+    left: 20%;
+    box-sizing: border-box;
+    bottom:30px;
+    z-index: 999;
+  }
+  .el-table--scrollable-x .el-table__body-wrapper {
+    overflow-x: hidden;
+  }
+  .dr-notice-warn{
+    width: 100%;
+    box-sizing: border-box;
+    padding:10px;
+    background: #FFE5E0;
+    color: red;
+  }
+  .dr-notice-body{
+    padding:10px;
+  }
+  .dr-notice-body>div{
+    margin-bottom: 20px;
   }
 </style>
