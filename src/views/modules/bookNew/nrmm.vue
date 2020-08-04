@@ -23,7 +23,7 @@
             <div class="dr-notice-body">
               <div class="dr-notice-list">
                 <div class="inline-block dr-notice-title">1.下载excel模板</div>
-                <a href="../../../../static/file/nrmm.xls" download="nrmm.xls">点击下载模板</a>
+                <a :href="path+'/static/file/nrmm.xls'" download="nrmm.xls">点击下载模板</a>
               </div>
               <div class="dr-notice-list">
                 <div class="inline-block dr-notice-title">2.上传编辑好的文件</div>
@@ -39,8 +39,12 @@
                 </el-upload>
               </div>
               <div class="dr-notice-warn">
-                <i class="el-icon-warning"></i>
-                注意:excel批量导入将覆盖询单内现有物料;上传文件类型仅限excel文件!
+                <div>
+                  <i class="el-icon-warning"></i>
+                  注意:
+                </div>
+                <div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;excel批量导入将覆盖询单内现有物料;上传文件类型仅限excel文件!</div>
+                <div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;模板内有内容的单元格为必填项,请严格按照模板格式填写!</div>
               </div>
             </div>
           </template>
@@ -132,6 +136,7 @@
   export default {
     data () {
       return {
+        path:window.SITE_CONFIG.cdnUrl,
         dataForm: {
           produceTime: '',
           evnProNum: '',

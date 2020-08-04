@@ -91,7 +91,7 @@
             <div class="dr-notice-body">
               <div class="dr-notice-list">
                 <div class="inline-block dr-notice-title">1.下载excel模板</div>
-                <a href="../../../../static/file/vehicle.xlsx" download="vehicle.xls">点击下载模板</a>
+                <a :href="path+'/static/file/vehicle.xls'" download="vehicle.xls">点击下载模板</a>
               </div>
               <div class="dr-notice-list">
                 <div class="inline-block dr-notice-title">2.上传编辑好的文件</div>
@@ -107,8 +107,13 @@
                 </el-upload>
               </div>
               <div class="dr-notice-warn">
-                <i class="el-icon-warning"></i>
-                注意:excel批量导入将覆盖询单内现有物料;上传文件类型仅限excel文件!
+                <div>
+                  <i class="el-icon-warning"></i>
+                  注意:
+                </div>
+                <div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;excel批量导入将覆盖询单内现有物料;上传文件类型仅限excel文件!</div>
+                <div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;模板内有内容的单元格为必填项,请严格按照模板格式填写!</div>
+                <div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;计量单号不能重复!</div>
               </div>
             </div>
           </template>
@@ -360,7 +365,7 @@
         </template>
       </el-table-column>
     </el-table>
-    <el-pagination
+    <el-pagination class="vehicle-pagin"
       @size-change="sizeChangeHandle"
       @current-change="currentChangeHandle"
       :current-page="pageIndex"
@@ -385,6 +390,7 @@
   export default {
     data () {
       return {
+        path:window.SITE_CONFIG.cdnUrl,
         dataForm: {
           enterTimeStart: '',
           enterTimeEnd: '',
@@ -401,7 +407,6 @@
 
         },
         searchMore:false,
-        url:'https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg',
         dataList: [],
         pageIndex: 1,
         pageSize: 10,
@@ -484,6 +489,8 @@
       this.getDataList();
       this.imgUrlfront=this.$http.adornUrl('/jinding/showImg/');
       this.token=this.$cookie.get('token');
+    },
+    mounted(){
       var num="_"+randomString();
       this.ws=new PxSocket({
         url:this.$http.wsUrl('jinding'+num),
@@ -492,8 +499,6 @@
         succ:this.getDataList
       });
       this.ws.connect();
-    },
-    mounted(){
       this.tabelWidth=this.$refs.tableList.bodyWrapper.scrollWidth;
     },
     beforeDestroy(){
@@ -672,7 +677,7 @@
     position: fixed;
     left: 20%;
     box-sizing: border-box;
-    bottom:30px;
+    bottom:3.5%;
     z-index: 999;
   }
   .el-table--scrollable-x .el-table__body-wrapper {
