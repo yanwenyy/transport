@@ -2,13 +2,34 @@
   <div class="mod-user">
     <el-form :inline="true" :model="dataForm" @keyup.enter.native="getDataList()">
       <el-form-item label="门岗:">
-        <el-input v-model="dataForm.doorPostName" placeholder="门岗" clearable></el-input>
+        <el-select clearable  v-model="dataForm.doorPostName" placeholder="请选择">
+          <el-option
+            v-for="item in mgList"
+            :key="item.value"
+            :label="item.label"
+            :value="item.value">
+          </el-option>
+        </el-select>
       </el-form-item>
       <el-form-item label="磅房:">
-        <el-input v-model="dataForm.poundRoom" placeholder="磅房" clearable></el-input>
+        <el-select clearable  v-model="dataForm.poundRoom" placeholder="请选择">
+          <el-option
+            v-for="item in bfList"
+            :key="item.value"
+            :label="item.label"
+            :value="item.value">
+          </el-option>
+        </el-select>
       </el-form-item>
       <el-form-item label="集装箱号:">
-        <el-input v-model="dataForm.containerNum" placeholder="集装箱号" clearable></el-input>
+        <el-select clearable  v-model="dataForm.containerNum" placeholder="请选择">
+          <el-option
+            v-for="item in ifJzx"
+            :key="item.value"
+            :label="item.label"
+            :value="item.value">
+          </el-option>
+        </el-select>
       </el-form-item>
       <el-form-item label="运输方式:">
         <el-select clearable  v-model="dataForm.tranType" placeholder="请选择">
@@ -459,6 +480,44 @@
           {
             value: '1',
             label: '公路'
+          }
+        ],
+        mgList:[
+          {
+            value: '三号门西进口',
+            label: '三号门西进口'
+          },
+          {
+            value: '三号门东进口',
+            label: '三号门东进口'
+          },
+          {
+            value: '北门进口',
+            label: '北门进口'
+          },
+        ],
+        bfList:[
+          {
+            value: 'sohao磅',
+            label: 'sohao磅'
+          },
+          {
+            value: '一号磅东',
+            label: '一号磅东'
+          },
+          {
+            value: '三号西',
+            label: '三号西'
+          },
+        ],
+        ifJzx:[
+          {
+            value:'1',
+            label:'是'
+          },
+          {
+            value:'0',
+            label:'否'
           }
         ],
         pickerOptionsStart: {

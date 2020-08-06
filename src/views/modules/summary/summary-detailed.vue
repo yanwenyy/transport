@@ -46,7 +46,7 @@
         prop="carWeigh"
         header-align="center"
         align="center"
-        label="发货地">
+        label="供应商">
       </el-table-column>
       <el-table-column
         prop="carWeigh"
@@ -59,6 +59,12 @@
         header-align="center"
         align="center"
         label="车牌号">
+      </el-table-column>
+      <el-table-column
+        prop="carWeigh"
+        header-align="center"
+        align="center"
+        label="燃油种类">
       </el-table-column>
       <el-table-column
         header-align="center"
