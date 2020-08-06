@@ -1,9 +1,6 @@
 <template>
   <div class="mod-user">
     <el-form :inline="true" :model="dataForm" @keyup.enter.native="getDataList()">
-      <el-form-item label="物料名称:">
-        <el-input v-model="dataForm.materialsName" placeholder="物料名称" clearable></el-input>
-      </el-form-item>
       <el-form-item label="月份:">
         <el-date-picker
           v-model="dataForm.monthTime"
@@ -31,7 +28,6 @@
       height="80vh"
       border
       v-loading="dataListLoading"
-      @selection-change="selectionChangeHandle"
       style="width: 100%;">
       <el-table-column
         type="selection"
@@ -47,48 +43,38 @@
         label="ID">
       </el-table-column>
       <el-table-column
-        prop="materialsName"
+        prop="carWeigh"
+        header-align="center"
         align="center"
-        label="物料名称">
+        label="发货地">
       </el-table-column>
       <el-table-column
         prop="carWeigh"
         header-align="center"
         align="center"
-        label="汽车运输量(万t)">
+        label="运输方式">
+      </el-table-column>
+      <el-table-column
+        prop="carWeigh"
+        header-align="center"
+        align="center"
+        label="车牌号">
       </el-table-column>
       <el-table-column
         header-align="center"
         align="center"
-        label="火车运输量(万t)">
-        <template slot-scope="scope">
-          <span>{{scope.row.sumWeigh-scope.row.carWeigh}}</span>
-        </template>
+        label="运输量">
+      </el-table-column>
+      <el-table-column
+        header-align="center"
+        align="center"
+        label="磅房">
       </el-table-column>
       <el-table-column
         prop="sumWeigh"
         header-align="center"
         align="center"
-        label="总运输量(万t)">
-      </el-table-column>
-      <el-table-column
-        header-align="center"
-        align="center"
-        label="清洁运输占比(%)">
-        <template slot-scope="scope">
-          <span>{{((scope.row.sumWeigh-scope.row.carWeigh)/ scope.row.sumWeigh).toFixed(2)*100}}%</span>
-        </template>
-      </el-table-column>
-      <el-table-column
-        fixed="right"
-        header-align="center"
-        align="center"
-        width="150"
-        label="操作">
-        <template slot-scope="scope">
-          <el-button v-if="" type="text" size="small" @click="addOrUpdateHandle(scope.row)">查看</el-button>
-          <!--<el-button v-if="isAuth('biz:pdbaidudate:delete')" type="text" size="small" @click="deleteHandle(scope.row.id)">删除</el-button>-->
-        </template>
+        label="进厂时间">
       </el-table-column>
     </el-table>
     <el-pagination
@@ -100,13 +86,10 @@
       :total="totalPage"
       layout="total, sizes, prev, pager, next, jumper">
     </el-pagination>
-    <!-- 弹窗, 新增 / 修改 -->
-    <add-or-update v-if="addOrUpdateVisible" ref="addOrUpdate" @refreshDataList="getDataList"></add-or-update>
   </div>
 </template>
 
 <script>
-  import AddOrUpdate from './summary-add-or-update'
   export default {
     data () {
       return {
@@ -125,7 +108,6 @@
       }
     },
     components: {
-      AddOrUpdate
     },
     activated () {
       this.getDataList();
@@ -166,25 +148,7 @@
         this.pageIndex = val
         this.getDataList()
       },
-      // 多选
-      selectionChangeHandle (val) {
-        this.dataListSelections = val
-      },
-      // 新增 / 修改
-      addOrUpdateHandle (id) {
-        // this.addOrUpdateVisible = true
-        // this.$nextTick(() => {
-        //   this.$refs.addOrUpdate.init(id)
-        // })
 
-        this.$router.push({
-          path: '/summary-detail',
-          // name: 'mallList',
-          query: {
-            mallCode: 'M000989'
-          }
-        })
-      },
     }
   }
 </script>

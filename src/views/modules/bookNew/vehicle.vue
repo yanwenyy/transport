@@ -83,10 +83,10 @@
       <el-form-item style="text-align: right;display: block">
         <el-button @click="getDataList()">查询</el-button>
         <el-button v-if="isAuth('biz:tran:save')" type="primary" @click="addOrUpdateHandle()">新增</el-button>
-        <el-popover v-if="isAuth('biz:tran:save')"
+        <el-popover v-model="drVisibel" v-if="isAuth('biz:tran:save')"
         placement="left"
         width="400"
-        trigger="hover">
+        trigger="click">
           <template>
             <div class="dr-notice-body">
               <div class="dr-notice-list">
@@ -149,6 +149,7 @@
       <div :style="{width:(tabelWidth*2.3)+'px',height: '1px',lineHeight:'30px'}"></div>
     </div>
     <el-table ref="tableList"
+              height="80vh"
       :data="dataList"
       border
       v-loading="dataListLoading"
@@ -479,6 +480,7 @@
             }
           },
         },
+        drVisibel:false
       }
     },
     components: {
@@ -622,7 +624,8 @@
             type: 'success',
             duration: 1500,
             onClose: () => {
-              this.getDataList()
+              this.getDataList();
+              this.drVisibel=false;
             }
           })
         } else {
@@ -677,7 +680,7 @@
     position: fixed;
     left: 20%;
     box-sizing: border-box;
-    bottom:3%;
+    bottom:2%;
     z-index: 999;
   }
   .el-table--scrollable-x .el-table__body-wrapper {
