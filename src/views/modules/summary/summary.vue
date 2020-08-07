@@ -80,7 +80,6 @@
         </template>
       </el-table-column>
       <el-table-column
-        fixed="right"
         header-align="center"
         align="center"
         width="150"
@@ -181,7 +180,7 @@
           path: '/summary-detail',
           // name: 'mallList',
           query: {
-            mallCode: 'M000989'
+            materialsNum: id.materialsNum
           }
         })
       },

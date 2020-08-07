@@ -22,7 +22,7 @@
         </el-select>
       </el-form-item>
       <el-form-item label="集装箱号:">
-        <el-select clearable  v-model="dataForm.containerNum" placeholder="请选择">
+        <el-select clearable  v-model="dataForm.ifconm" placeholder="请选择">
           <el-option
             v-for="item in ifJzx"
             :key="item.value"
@@ -55,6 +55,16 @@
         <el-select clearable  v-model="dataForm.emissionStand" placeholder="请选择">
           <el-option
             v-for="item in pfbz"
+            :key="item.value"
+            :label="item.label"
+            :value="item.value">
+          </el-option>
+        </el-select>
+      </el-form-item>
+      <el-form-item label="磅单类型:">
+        <el-select clearable  v-model="dataForm.meaType" placeholder="请选择">
+          <el-option
+            v-for="item in bdClass"
             :key="item.value"
             :label="item.label"
             :value="item.value">
@@ -167,7 +177,7 @@
       </el-form-item>
     </el-form>
     <div v-if="dataList" @scroll="barScroll" class="elScrollbar">
-      <div :style="{width:(tabelWidth*2.3)+'px',height: '1px',lineHeight:'30px'}"></div>
+      <div :style="{width:(tabelWidth*2.5)+'px',height: '1px',lineHeight:'30px'}"></div>
     </div>
     <el-table ref="tableList"
               height="80vh"
@@ -283,6 +293,12 @@
         label="燃油种类">
       </el-table-column>
       <el-table-column
+        v-if="checkedCities.indexOf('所有人')!=-1"
+        prop="owner"
+        align="center"
+        label="所有人">
+      </el-table-column>
+      <el-table-column
         v-if="checkedCities.indexOf('随车清单')!=-1"
         header-align="center"
         align="center"
@@ -330,6 +346,15 @@
         prop="measureNum"
         align="center"
         label="计量单号">
+      </el-table-column>
+      <el-table-column
+        v-if="checkedCities.indexOf('磅单类型')!=-1"
+        align="center"
+        label="磅单类型">
+        <template slot-scope="scope">
+          <span v-if="scope.row.measureNum&&scope.row.measureNum.indexOf('Recln')!=-1">采购</span>
+          <span v-if="scope.row.measureNum&&scope.row.measureNum.indexOf('SaleOut')!=-1">销售</span>
+        </template>
       </el-table-column>
       <el-table-column
         v-if="checkedCities.indexOf('毛重')!=-1"
@@ -405,7 +430,7 @@
 <script>
   const cityOptions = ['ID', '进厂时间', '计量时间', '退卡时间','出厂时间','进厂照片','出厂照片','门岗名称','磅房名称',
     '车牌号','注册日期','车辆识别代号','发动机号码','燃油种类','随车清单','行驶证','排放阶段','供应商',
-  '物料编码','物料名称','计量单号','毛重','皮重','净重','集装箱号','运输方式','运输单位'];
+  '物料编码','物料名称','计量单号','毛重','皮重','净重','集装箱号','运输方式','运输单位','磅单类型','所有人'];
   import AddOrUpdate from './vehicle-add-or-update';
   import ImgPre from './img-pre'
   import {PxSocket,randomString} from '@/utils'
@@ -422,11 +447,11 @@
           materialsName:'',
           doorPostName:'',
           poundRoom: '',
-          containerNum: '',
+          ifconm: '',
           tranType:'',
           emissionStand:'',
           fuelType:'',
-
+          meaType:''
         },
         searchMore:false,
         dataList: [],
@@ -516,8 +541,18 @@
             label:'是'
           },
           {
-            value:'0',
+            value:'2',
             label:'否'
+          }
+        ],
+        bdClass:[
+          {
+            value:'Recln',
+            label:'采购 '
+          },
+          {
+            value:'SaleOut',
+            label:'销售'
           }
         ],
         pickerOptionsStart: {
@@ -583,11 +618,11 @@
             'materialsName': this.dataForm.materialsName,
             'doorPostName': this.dataForm.doorPostName,
             'poundRoom': this.dataForm.poundRoom,
-            'containerNum': this.dataForm.containerNum,
+            'ifconm': this.dataForm.ifconm,
             'tranType': this.dataForm.tranType,
             'emissionStand': this.dataForm.emissionStand,
             'fuelType': this.dataForm.fuelType,
-
+            'meaType':this.dataForm.meaType
           })
         }).then(({data}) => {
           if (data && data.code === 10000) {
@@ -707,7 +742,7 @@
       //自定义滚动条
       barScroll(e){
         this.$refs.tableList.bodyWrapper.scrollLeft =e.target.scrollLeft;
-      }
+      },
     }
   }
 </script>
@@ -734,10 +769,11 @@
     margin-bottom: 10px;
   }
   .elScrollbar{
-    width: 77%;
+    width: 78%;
     overflow-x: auto;
     position: fixed;
-    left: 20%;
+    /*left: 20%;*/
+    left: 250px;
     box-sizing: border-box;
     bottom:2%;
     z-index: 999;

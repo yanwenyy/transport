@@ -43,41 +43,45 @@
         label="ID">
       </el-table-column>
       <el-table-column
-        prop="carWeigh"
+        prop="clientName"
         header-align="center"
         align="center"
         label="供应商">
       </el-table-column>
       <el-table-column
-        prop="carWeigh"
         header-align="center"
         align="center"
         label="运输方式">
+        <template slot-scope="scope">
+          {{scope.row.tranType==0?'铁路':'公路'}}
+        </template>
       </el-table-column>
       <el-table-column
-        prop="carWeigh"
+        prop="carNum"
         header-align="center"
         align="center"
         label="车牌号">
       </el-table-column>
       <el-table-column
-        prop="carWeigh"
+        prop="fuelType"
         header-align="center"
         align="center"
         label="燃油种类">
       </el-table-column>
       <el-table-column
+        prop="netWeigh"
         header-align="center"
         align="center"
         label="运输量">
       </el-table-column>
       <el-table-column
+        prop="poundRoom"
         header-align="center"
         align="center"
         label="磅房">
       </el-table-column>
       <el-table-column
-        prop="sumWeigh"
+        prop="enterTime"
         header-align="center"
         align="center"
         label="进厂时间">
@@ -102,7 +106,7 @@
         dataForm: {
           monthTime: '',
           dayTime: '',
-          materialsName:''
+          materialsNum:''
         },
         dataList: [],
         pageIndex: 1,
@@ -116,6 +120,7 @@
     components: {
     },
     activated () {
+      this.dataForm.materialsNum=this.$route.query.materialsNum;
       this.getDataList();
     },
     methods: {
@@ -123,14 +128,14 @@
       getDataList () {
         this.dataListLoading = true;
         this.$http({
-          url: this.$http.adornUrl('/jinding/sum/list'),
+          url: this.$http.adornUrl('/jinding/sum/details'),
           method: 'get',
           params: this.$http.adornParams({
             'pageNum': this.pageIndex,
             'pageSize': this.pageSize,
             'monthTime': this.dataForm.monthTime||'',
             'dayTime': this.dataForm.dayTime||'',
-            'materialsName': this.dataForm.materialsName
+            'materialsNum': this.dataForm.materialsNum
           })
         }).then(({data}) => {
           if (data && data.code === 10000) {
