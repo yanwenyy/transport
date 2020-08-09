@@ -77,33 +77,17 @@
       <el-form-item v-show="searchMore" label="运输货物名称:">
         <el-input v-model="dataForm.materialsName" placeholder="运输货物名称" clearable></el-input>
       </el-form-item>
-      <el-form-item v-show="searchMore" label="进厂开始时间:">
+      <el-form-item v-show="searchMore" label="开始时间:">
         <el-date-picker
-          v-model="dataForm.enterTimeStart"
+          v-model="dataForm.timeStart"
           type="datetime"
           value-format="yyyy-MM-dd HH:mm:ss"
           placeholder="选择日期">
         </el-date-picker>
       </el-form-item>
-      <el-form-item v-show="searchMore" label="进厂结束时间:">
+      <el-form-item v-show="searchMore" label="结束时间:">
         <el-date-picker
-          v-model="dataForm.enterTimeEnd"
-          type="datetime"
-          value-format="yyyy-MM-dd HH:mm:ss"
-          placeholder="选择日期">
-        </el-date-picker>
-      </el-form-item>
-      <el-form-item v-show="searchMore" label="出厂开始时间:">
-        <el-date-picker
-          v-model="dataForm.outFactoryTimeStart"
-          type="datetime"
-          value-format="yyyy-MM-dd HH:mm:ss"
-          placeholder="选择日期">
-        </el-date-picker>
-      </el-form-item>
-      <el-form-item v-show="searchMore" label="出厂结束时间:">
-        <el-date-picker
-          v-model="dataForm.outFactoryTimeEnd"
+          v-model="dataForm.timeEnd"
           type="datetime"
           value-format="yyyy-MM-dd HH:mm:ss"
           placeholder="选择日期">
@@ -293,10 +277,10 @@
         label="燃油种类">
       </el-table-column>
       <el-table-column
-        v-if="checkedCities.indexOf('所有人')!=-1"
+        v-if="checkedCities.indexOf('车队名称')!=-1"
         prop="owner"
         align="center"
-        label="所有人">
+        label="车队名称">
       </el-table-column>
       <el-table-column
         v-if="checkedCities.indexOf('随车清单')!=-1"
@@ -352,7 +336,7 @@
         align="center"
         label="磅单类型">
         <template slot-scope="scope">
-          <span v-if="scope.row.measureNum&&scope.row.measureNum.indexOf('Recln')!=-1">采购</span>
+          <span v-if="scope.row.measureNum&&scope.row.measureNum.indexOf('RecIn')!=-1">采购</span>
           <span v-if="scope.row.measureNum&&scope.row.measureNum.indexOf('SaleOut')!=-1">销售</span>
         </template>
       </el-table-column>
@@ -430,7 +414,7 @@
 <script>
   const cityOptions = ['ID', '进厂时间', '计量时间', '退卡时间','出厂时间','进厂照片','出厂照片','门岗名称','磅房名称',
     '车牌号','注册日期','车辆识别代号','发动机号码','燃油种类','随车清单','行驶证','排放阶段','供应商',
-  '物料编码','物料名称','计量单号','毛重','皮重','净重','集装箱号','运输方式','运输单位','磅单类型','所有人'];
+  '物料编码','物料名称','计量单号','毛重','皮重','净重','集装箱号','运输方式','运输单位','磅单类型','车队名称'];
   import AddOrUpdate from './vehicle-add-or-update';
   import ImgPre from './img-pre'
   import {PxSocket,randomString} from '@/utils'
@@ -439,10 +423,8 @@
       return {
         path:window.SITE_CONFIG.cdnUrl,
         dataForm: {
-          enterTimeStart: '',
-          enterTimeEnd: '',
-          outFactoryTimeStart: '',
-          outFactoryTimeEnd: '',
+          timeStart: '',
+          timeEnd: '',
           carNum:'',
           materialsName:'',
           doorPostName:'',
@@ -547,7 +529,7 @@
         ],
         bdClass:[
           {
-            value:'Recln',
+            value:'RecIn',
             label:'采购 '
           },
           {
@@ -610,10 +592,8 @@
           params: this.$http.adornParams({
             'pageNum': this.pageIndex,
             'pageSize': this.pageSize,
-            'enterTimeStart': this.dataForm.enterTimeStart|| '',
-            'enterTimeEnd': this.dataForm.enterTimeEnd|| '',
-            'outFactoryTimeStart': this.dataForm.outFactoryTimeStart|| '',
-            'outFactoryTimeEnd': this.dataForm.outFactoryTimeEnd|| '',
+            'timeStart': this.dataForm.timeStart|| '',
+            'timeEnd': this.dataForm.timeEnd|| '',
             'carNum': this.dataForm.carNum,
             'materialsName': this.dataForm.materialsName,
             'doorPostName': this.dataForm.doorPostName,
@@ -775,7 +755,7 @@
     /*left: 20%;*/
     left: 250px;
     box-sizing: border-box;
-    bottom:2%;
+    bottom:5px;
     z-index: 999;
   }
   .el-table--scrollable-x .el-table__body-wrapper {

@@ -28,17 +28,13 @@
     </el-form>
     <el-table
       :data="dataList"
+      show-summary
+      :summary-method="getSummaries"
       height="80vh"
       border
       v-loading="dataListLoading"
       @selection-change="selectionChangeHandle"
       style="width: 100%;">
-      <el-table-column
-        type="selection"
-        header-align="center"
-        align="center"
-        width="50">
-      </el-table-column>
       <el-table-column
         type="index"
         header-align="center"
@@ -58,12 +54,13 @@
         label="汽车运输量(万t)">
       </el-table-column>
       <el-table-column
+        prop="trainWeigh"
         header-align="center"
         align="center"
         label="火车运输量(万t)">
-        <template slot-scope="scope">
-          <span>{{scope.row.sumWeigh-scope.row.carWeigh}}</span>
-        </template>
+        <!--<template slot-scope="scope">-->
+          <!--<span>{{scope.row.sumWeigh-scope.row.carWeigh}}</span>-->
+        <!--</template>-->
       </el-table-column>
       <el-table-column
         prop="sumWeigh"
@@ -72,12 +69,13 @@
         label="总运输量(万t)">
       </el-table-column>
       <el-table-column
+        prop="percentage"
         header-align="center"
         align="center"
         label="清洁运输占比(%)">
-        <template slot-scope="scope">
-          <span>{{((scope.row.sumWeigh-scope.row.carWeigh)/ scope.row.sumWeigh).toFixed(2)*100}}%</span>
-        </template>
+        <!--<template slot-scope="scope">-->
+          <!--<span>{{((scope.row.sumWeigh-scope.row.carWeigh)/ scope.row.sumWeigh).toFixed(2)*100}}%</span>-->
+        <!--</template>-->
       </el-table-column>
       <el-table-column
         header-align="center"
@@ -145,7 +143,10 @@
           })
         }).then(({data}) => {
           if (data && data.code === 10000) {
-            this.dataList = data.data
+            this.dataList = data.data;
+            for(var i in this.dataList){
+              this.dataList[i].trainWeigh=this.dataList[i].sumWeigh-this.dataList[i].carWeigh
+            }
             this.totalPage = data.total
           } else {
             this.dataList = []
@@ -183,6 +184,31 @@
             materialsNum: id.materialsNum
           }
         })
+      },
+
+      getSummaries(param) {
+        const { columns, data } = param;
+        const sums = [];
+        columns.forEach((column, index) => {
+          if (index === 0) {
+            sums[index] = '合计';
+            return;
+          }else if (index === 1||index === 6) {
+            sums[index] = '';
+            return;
+          }
+          const values = data.map(item => Number(item[column.property]));
+          sums[index] = values.reduce((prev, curr) => {
+            const value = Number(curr);
+            if (!isNaN(value)) {
+              return prev + curr;
+            } else {
+              return prev;
+            }
+          }, 0);
+        });
+
+        return sums;
       },
     }
   }
