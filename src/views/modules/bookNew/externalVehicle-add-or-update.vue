@@ -4,8 +4,8 @@
     :close-on-click-modal="false"
     :visible.sync="visible">
     <el-form :model="dataForm" :rules="dataRule" ref="dataForm" @keyup.enter.native="dataFormSubmit()" label-width="80px">
-      <el-form-item label="环保登记编码或内部管理号牌">
-        <el-input v-model="dataForm.evnCarNum" placeholder="环保登记编码或内部管理号牌"></el-input>
+      <el-form-item label="车牌号">
+        <el-input v-model="dataForm.evnCarNum" placeholder="车牌号"></el-input>
       </el-form-item>
       <el-form-item label="注册日期">
         <el-date-picker
@@ -51,6 +51,16 @@
           </el-upload>
         </div>
       </el-form-item>
+      <el-form-item label="燃油种类:">
+        <el-select clearable  v-model="dataForm.fuelType" placeholder="请选择">
+          <el-option
+            v-for="item in ryzl"
+            :key="item.value"
+            :label="item.label"
+            :value="item.value">
+          </el-option>
+        </el-select>
+      </el-form-item>
       <el-form-item label="行驶证">
         <div class="inline-block box-img" v-if="dataForm.drivinglLicense&&dataForm.drivinglLicense!=''">
           <el-image class="look-img" title="点击查看大图"
@@ -83,24 +93,6 @@
   import { isInteger } from '@/utils/validate'
   export default {
     data () {
-      var validateInteger = (rule, value, callback) => {
-        if(value===''){
-          callback(new Error('不能为空'))
-        }else if (!isInteger(value)) {
-          callback(new Error('格式不正确'))
-        } else {
-          callback()
-        }
-      };
-      var validateMoney = (rule, value, callback) => {
-        if(!value){
-          callback(new Error('不能为空'))
-        }else if (!/(^[1-9]([0-9]+)?(\.[0-9]{1,2})?$)|(^(0){1}$)|(^[0-9]\.[0-9]([0-9])?$)/.test(value)) {
-          callback(new Error('金额格式不正确'))
-        } else {
-          callback()
-        }
-      };
       return {
         visible: false,
         dialogImageUrl: '',
@@ -113,7 +105,8 @@
           engineNum: '',
           emissionStand:'',
           carCheckList:'',
-          drivinglLicense:''
+          drivinglLicense:'',
+          fuelType:''
         },
         token:'',
         imgUrlfront:'',
@@ -125,21 +118,25 @@
           value: '国六',
           label: '国六'
         }],
+        ryzl:[
+          {
+            value: '柴油',
+            label: '柴油'
+          },
+          {
+            value: '天然气',
+            label: '天然气'
+          },
+          {
+            value: '纯电动',
+            label: '纯电动'
+          },
+          {
+            value: '油电混动',
+            label: '油电混动'
+          },
+        ],
         value: '',
-        dataRule: {
-          dataTime: [
-            { required: true, message: '数据时间不能为空', trigger: 'blur' }
-          ],
-          dataAmount: [
-            { required: true,validator: validateInteger, trigger: 'blur' }
-          ],
-          effectiveData: [
-            { required: true, validator: validateInteger,trigger: 'blur' }
-          ],
-          todayConsumeMoney: [
-            { required: true, validator: validateMoney, trigger: 'blur' }
-          ],
-        }
       }
     },
     methods: {
@@ -164,6 +161,7 @@
                 this.dataForm.emissionStand = data.data.emissionStand;
                 this.dataForm.carCheckList = data.data.carCheckList;
                 this.dataForm.drivinglLicense = data.data.drivinglLicense;
+                this.dataForm.fuelType = data.data.fuelType;
                 var list=[this.dataForm.carCheckList.indexOf('http')!=-1?this.dataForm.carCheckList:this.imgUrlfront+data.data.carCheckList,this.dataForm.drivinglLicense.indexOf('http')!=-1?this.dataForm.drivinglLicense:this.imgUrlfront+data.data.drivinglLicense];
                 this.srcList=list;
               }
@@ -176,6 +174,7 @@
             this.dataForm.emissionStand = '';
             this.dataForm.carCheckList = '';
             this.dataForm.drivinglLicense = '';
+            this.dataForm.fuelType=''
           }
         })
       },

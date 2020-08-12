@@ -73,13 +73,23 @@
           emissionNum: '',
           engineNum:''
         },
-        options: [{
+        options: [
+          {
+          value: '国三',
+          label: '国三'
+          },{
+          value: '国四',
+          label: '国四'
+          },{
           value: '国五',
           label: '国五'
-        }, {
+          },{
           value: '国六',
           label: '国六'
-        }],
+          },{
+          value: '电动',
+          label: '电动'
+          }],
         value: '',
         dataRule: {
           dataTime: [
