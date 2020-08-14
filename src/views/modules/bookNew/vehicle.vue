@@ -74,6 +74,9 @@
       <el-form-item v-show="searchMore" label="车牌号:">
         <el-input v-model="dataForm.carNum" placeholder="车牌号" clearable></el-input>
       </el-form-item>
+      <el-form-item v-show="searchMore" label="物料大类:">
+        <el-input v-model="dataForm.materialsPname" placeholder="物料大类" clearable></el-input>
+      </el-form-item>
       <el-form-item v-show="searchMore" label="运输货物名称:">
         <el-input v-model="dataForm.materialsName" placeholder="运输货物名称" clearable></el-input>
       </el-form-item>
@@ -320,10 +323,24 @@
         label="物料编码">
       </el-table-column>
       <el-table-column
+        v-if="checkedCities.indexOf('物料大类')!=-1"
+        prop="materialsPname"
+        align="center"
+        label="物料大类">
+      </el-table-column>
+      <el-table-column
         v-if="checkedCities.indexOf('物料名称')!=-1"
         prop="materialsName"
         align="center"
         label="物料名称">
+      </el-table-column>
+      <el-table-column
+        v-if="checkedCities.indexOf('磅房照片')!=-1"
+        align="center"
+        label="磅房照片">
+        <template slot-scope="scope">
+          <img @click="preImg(scope.row.poundImg&&scope.row.poundImg.indexOf('http')!=-1?scope.row.poundImg:imgUrlfront+scope.row.poundImg)" class="table-list-img" v-if="scope.row.poundImg" :src="(scope.row.poundImg&&scope.row.poundImg.indexOf('http')!=-1?scope.row.poundImg:scope.row.poundImg?imgUrlfront+scope.row.poundImg:'')" alt=" ">
+        </template>
       </el-table-column>
       <el-table-column
         v-if="checkedCities.indexOf('计量单号')!=-1"
@@ -414,7 +431,7 @@
 <script>
   const cityOptions = ['ID', '进厂时间', '计量时间', '退卡时间','出厂时间','进厂照片','出厂照片','门岗名称','磅房名称',
     '车牌号','注册日期','车辆识别代号','发动机号码','燃油种类','随车清单','行驶证','排放阶段','供应商',
-  '物料编码','物料名称','计量单号','毛重','皮重','净重','集装箱号','运输方式','运输单位','磅单类型','车队名称'];
+  '物料编码','物料名称','计量单号','毛重','皮重','净重','集装箱号','运输方式','运输单位','磅单类型','车队名称','物料大类','磅房照片'];
   import AddOrUpdate from './vehicle-add-or-update';
   import ImgPre from './img-pre'
   import {PxSocket,randomString} from '@/utils'
@@ -433,7 +450,8 @@
           tranType:'',
           emissionStand:'',
           fuelType:'',
-          meaType:''
+          meaType:'',
+          materialsPname:''
         },
         searchMore:false,
         dataList: [],
@@ -592,8 +610,8 @@
           params: this.$http.adornParams({
             'pageNum': this.pageIndex,
             'pageSize': this.pageSize,
-            'timeStart': this.dataForm.timeStart|| '',
-            'timeEnd': this.dataForm.timeEnd|| '',
+            'timeStart': this.dataForm.timeStart || '',
+            'timeEnd': this.dataForm.timeEnd || '',
             'carNum': this.dataForm.carNum,
             'materialsName': this.dataForm.materialsName,
             'doorPostName': this.dataForm.doorPostName,
@@ -602,7 +620,8 @@
             'tranType': this.dataForm.tranType,
             'emissionStand': this.dataForm.emissionStand,
             'fuelType': this.dataForm.fuelType,
-            'meaType':this.dataForm.meaType
+            'meaType': this.dataForm.meaType,
+            'materialsPname': this.dataForm.materialsPname
           })
         }).then(({data}) => {
           if (data && data.code === 10000) {

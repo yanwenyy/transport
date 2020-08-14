@@ -17,12 +17,24 @@
           placeholder="选择日期"  @change="dataForm.monthTime=''">
         </el-date-picker>
       </el-form-item>
+      <el-form-item label="排放标准:">
+        <el-select clearable  v-model="dataForm.emissionStand" placeholder="请选择">
+          <el-option
+            v-for="item in pfbz"
+            :key="item.value"
+            :label="item.label"
+            :value="item.value">
+          </el-option>
+        </el-select>
+      </el-form-item>
       <el-form-item>
         <el-button @click="getDataList()">查询</el-button>
+        <el-button type="warning" @click="down">导出</el-button>
         <!--<el-button v-if="" type="primary" @click="addOrUpdateHandle()">新增</el-button>-->
         <!--<el-button v-if="isAuth('sys:user:delete')" type="danger" @click="deleteHandle()" :disabled="dataListSelections.length <= 0">批量删除</el-button>-->
       </el-form-item>
     </el-form>
+    <div class="sumWeigh">总运输量:{{detailList.sumWeigh}}</div>
     <el-table
       :data="dataList"
       height="80vh"
@@ -106,7 +118,8 @@
         dataForm: {
           monthTime: '',
           dayTime: '',
-          materialsNum:''
+          materialsNum:'',
+          emissionStand:''
         },
         dataList: [],
         pageIndex: 1,
@@ -115,12 +128,22 @@
         dataListLoading: false,
         dataListSelections: [],
         addOrUpdateVisible: false,
+        detailList:'',
+        pfbz: [
+          {
+            value: '国五',
+            label: '国五'
+          }, {
+            value: '国六',
+            label: '国六'
+          }],
       }
     },
     components: {
     },
     activated () {
-      this.dataForm.materialsNum=this.$route.query.materialsNum;
+      this.dataForm.materialsNum=this.$route.params.list.materialsNum;
+      this.detailList=this.$route.params.list;
       this.getDataList();
     },
     methods: {
@@ -160,6 +183,19 @@
         this.getDataList()
       },
 
+      //导出
+      down (){
+        var url='/jinding/po/sum/details?monthTime='+this.dataForm.monthTime+'&dayTime='+this.dataForm.dayTime+'&tranType=&emissionStand='+this.dataForm.emissionStand+ '&materialsNum='+this.dataForm.materialsNum;
+        // console.log(url)
+        window.open(this.$http.adornUrl(url));
+      },
     }
   }
 </script>
+<style>
+  .sumWeigh{
+    font-size: 18px;
+    margin-bottom: 10px;
+    font-weight: bold;
+  }
+</style>

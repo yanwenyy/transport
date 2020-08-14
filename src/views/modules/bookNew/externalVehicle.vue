@@ -100,7 +100,7 @@
         label="ID">
       </el-table-column>
       <el-table-column
-        prop="evnCarNum"
+        prop="carNum"
         align="center"
         label="车牌号">
       </el-table-column>
@@ -183,8 +183,10 @@
       return {
         path:window.SITE_CONFIG.cdnUrl,
         dataForm: {
-          evnCarNum: '',
-          registTime: '',
+          timeStart: '',
+          timeEnd: '',
+          emissionStand:'',
+          fuelType:''
         },
         token:'',
         imgUrlfront:'',
@@ -239,13 +241,15 @@
       getDataList () {
         this.dataListLoading = true
         this.$http({
-          url: this.$http.adornUrl('/jinding/factory/car/list'),
+          url: this.$http.adornUrl('/jinding/outcar/list'),
           method: 'get',
           params: this.$http.adornParams({
             'pageNum': this.pageIndex,
             'pageSize': this.pageSize,
-            'evnCarNum': this.dataForm.evnCarNum,
-            'registTime': this.dataForm.registTime||'',
+            'timeStart': this.dataForm.timeStart|| '',
+            'timeEnd': this.dataForm.timeEnd|| '',
+            'emissionStand': this.dataForm.emissionStand,
+            'fuelType': this.dataForm.fuelType||'',
           })
         }).then(({data}) => {
           if (data && data.code === 10000) {

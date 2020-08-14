@@ -28,8 +28,6 @@
     </el-form>
     <el-table
       :data="dataList"
-      show-summary
-      :summary-method="getSummaries"
       height="80vh"
       border
       v-loading="dataListLoading"
@@ -41,6 +39,11 @@
         align="center"
         width="80"
         label="ID">
+      </el-table-column>
+      <el-table-column
+        prop="materialsPname"
+        align="center"
+        label="物料大类">
       </el-table-column>
       <el-table-column
         prop="materialsName"
@@ -73,9 +76,9 @@
         header-align="center"
         align="center"
         label="清洁运输占比(%)">
-        <!--<template slot-scope="scope">-->
-          <!--<span>{{((scope.row.sumWeigh-scope.row.carWeigh)/ scope.row.sumWeigh).toFixed(2)*100}}%</span>-->
-        <!--</template>-->
+        <template slot-scope="scope">
+          <span>{{scope.row.percentage%1===0?scope.row.percentage*100+'%':(scope.row.percentage*100).toFixed(2)+'%'}}</span>
+        </template>
       </el-table-column>
       <el-table-column
         header-align="center"
@@ -178,10 +181,10 @@
         // })
 
         this.$router.push({
-          path: '/summary-detail',
+          name: 'summary-detail',
           // name: 'mallList',
-          query: {
-            materialsNum: id.materialsNum
+          params: {
+            list: id
           }
         })
       },
@@ -193,7 +196,7 @@
           if (index === 0) {
             sums[index] = '合计';
             return;
-          }else if (index === 1||index === 6) {
+          }else if (index === 1||index === 7||index === 2) {
             sums[index] = '';
             return;
           }
@@ -207,7 +210,6 @@
             }
           }, 0);
         });
-
         return sums;
       },
     }
