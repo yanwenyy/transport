@@ -39,42 +39,42 @@
       </el-form-item>
       <el-form-item>
         <el-button @click="getDataList()">查询</el-button>
-        <el-button v-if="isAuth('biz:factorycar:save')" type="primary" @click="addOrUpdateHandle()">新增</el-button>
-        <el-popover v-model="drVisibel"  v-if="isAuth('biz:factorycar:save')"
-                    placement="left"
-                    width="400"
-                    trigger="click">
-          <template>
-            <div class="dr-notice-body">
-              <div class="dr-notice-list">
-                <div class="inline-block dr-notice-title">1.下载excel模板</div>
-                <a :href="path+'/static/file/venueVehicle.xls'" download="venueVehicle.xls">点击下载模板</a>
-              </div>
-              <div class="dr-notice-list">
-                <div class="inline-block dr-notice-title">2.上传编辑好的文件</div>
-                <el-upload
-                  class="inline-block"
-                  :headers="{'token':token}"
-                  :action="this.$http.adornUrl('/biz/factorycar/import/factory/car')"
-                  :on-success="handleChange"
-                  :on-error="handleChange"
-                  :show-file-list="false"
-                >
-                  <el-button type="warning">批量导入</el-button>
-                </el-upload>
-              </div>
-              <div class="dr-notice-warn">
-                <div>
-                  <i class="el-icon-warning"></i>
-                  注意:
-                </div>
-                <div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;excel批量导入将覆盖询单内现有物料;上传文件类型仅限excel文件!</div>
-                <div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;模板内有内容的单元格为必填项,请严格按照模板格式填写!</div>
-              </div>
-            </div>
-          </template>
-          <el-button type="warning" slot="reference">批量导入</el-button>
-        </el-popover>
+        <!--<el-button v-if="isAuth('biz:factorycar:save')" type="primary" @click="addOrUpdateHandle()">新增</el-button>-->
+        <!--<el-popover v-model="drVisibel"  v-if="isAuth('biz:factorycar:save')"-->
+                    <!--placement="left"-->
+                    <!--width="400"-->
+                    <!--trigger="click">-->
+          <!--<template>-->
+            <!--<div class="dr-notice-body">-->
+              <!--<div class="dr-notice-list">-->
+                <!--<div class="inline-block dr-notice-title">1.下载excel模板</div>-->
+                <!--<a :href="path+'/static/file/venueVehicle.xls'" download="venueVehicle.xls">点击下载模板</a>-->
+              <!--</div>-->
+              <!--<div class="dr-notice-list">-->
+                <!--<div class="inline-block dr-notice-title">2.上传编辑好的文件</div>-->
+                <!--<el-upload-->
+                  <!--class="inline-block"-->
+                  <!--:headers="{'token':token}"-->
+                  <!--:action="this.$http.adornUrl('/biz/factorycar/import/factory/car')"-->
+                  <!--:on-success="handleChange"-->
+                  <!--:on-error="handleChange"-->
+                  <!--:show-file-list="false"-->
+                <!--&gt;-->
+                  <!--<el-button type="warning">批量导入</el-button>-->
+                <!--</el-upload>-->
+              <!--</div>-->
+              <!--<div class="dr-notice-warn">-->
+                <!--<div>-->
+                  <!--<i class="el-icon-warning"></i>-->
+                  <!--注意:-->
+                <!--</div>-->
+                <!--<div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;excel批量导入将覆盖询单内现有物料;上传文件类型仅限excel文件!</div>-->
+                <!--<div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;模板内有内容的单元格为必填项,请严格按照模板格式填写!</div>-->
+              <!--</div>-->
+            <!--</div>-->
+          <!--</template>-->
+          <!--<el-button type="warning" slot="reference">批量导入</el-button>-->
+        <!--</el-popover>-->
 
         <!--<el-button v-if="isAuth('sys:user:delete')" type="danger" @click="deleteHandle()" :disabled="dataListSelections.length <= 0">批量删除</el-button>-->
       </el-form-item>
@@ -148,17 +148,17 @@
           <img @click="preImg(scope.row.drivinglLicense&&scope.row.drivinglLicense.indexOf('http')!=-1?scope.row.drivinglLicense:imgUrlfront+scope.row.drivinglLicense)" class="table-list-img" v-if="scope.row.drivinglLicense" :src="scope.row.drivinglLicense&&scope.row.drivinglLicense.indexOf('http')!=-1?scope.row.drivinglLicense:scope.row.drivinglLicense?imgUrlfront+scope.row.drivinglLicense:''" alt="">
         </template>
       </el-table-column>
-      <el-table-column
-        fixed="right"
-        header-align="center"
-        align="center"
-        width="150"
-        label="操作">
-        <template slot-scope="scope">
-          <el-button v-if="isAuth('biz:factorycar:update')" type="text" size="small" @click="addOrUpdateHandle(scope.row.id)">修改</el-button>
-          <el-button v-if="isAuth('biz:factorycar:delete')" type="text" size="small" @click="deleteHandle(scope.row.id)">删除</el-button>
-        </template>
-      </el-table-column>
+      <!--<el-table-column-->
+        <!--fixed="right"-->
+        <!--header-align="center"-->
+        <!--align="center"-->
+        <!--width="150"-->
+        <!--label="操作">-->
+        <!--<template slot-scope="scope">-->
+          <!--<el-button v-if="isAuth('biz:factorycar:update')" type="text" size="small" @click="addOrUpdateHandle(scope.row.id)">修改</el-button>-->
+          <!--<el-button v-if="isAuth('biz:factorycar:delete')" type="text" size="small" @click="deleteHandle(scope.row.id)">删除</el-button>-->
+        <!--</template>-->
+      <!--</el-table-column>-->
     </el-table>
     <el-pagination
       @size-change="sizeChangeHandle"
