@@ -55,21 +55,27 @@
         header-align="center"
         align="center"
         label="汽车运输量(万t)">
+        <template slot-scope="scope">
+          <span>{{scope.row.carWeigh.toFixed(2)}}</span>
+        </template>
       </el-table-column>
       <el-table-column
         prop="trainWeigh"
         header-align="center"
         align="center"
         label="火车运输量(万t)">
-        <!--<template slot-scope="scope">-->
-          <!--<span>{{scope.row.sumWeigh-scope.row.carWeigh}}</span>-->
-        <!--</template>-->
+        <template slot-scope="scope">
+          <span>{{scope.row.trainWeigh.toFixed(2)}}</span>
+        </template>
       </el-table-column>
       <el-table-column
         prop="sumWeigh"
         header-align="center"
         align="center"
         label="总运输量(万t)">
+        <template slot-scope="scope">
+          <span>{{scope.row.sumWeigh.toFixed(2)}}</span>
+        </template>
       </el-table-column>
       <el-table-column
         prop="percentage"

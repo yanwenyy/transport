@@ -104,6 +104,9 @@
           header-align="center"
           align="center"
           label="重量">
+          <template slot-scope="scope">
+            <span>{{scope.row.trainWeigh.toFixed(2)}}</span>
+          </template>
         </el-table-column>
       </el-table-column>
       <el-table-column label="公路（国五及以上车辆）"  align="center">
@@ -118,6 +121,9 @@
           header-align="center"
           align="center"
           label="重量">
+          <template slot-scope="scope">
+            <span>{{scope.row.carWeigh.toFixed(2)}}</span>
+          </template>
         </el-table-column>
       </el-table-column>
       <el-table-column

@@ -117,7 +117,8 @@
       height: 100%;
       content: "";
       background-image: url(~@/assets/img/bg5.jpg);
-      background-size: cover;
+      /*background-size:  100% 100%;*/
+      background-size: 100% 100%;
     }
     .site-content__wrapper {
       position: absolute;
@@ -158,7 +159,7 @@
       right: 5%;
       padding: 50px;
       width: 470px;
-      height: 65%;
+      height: 400px;
       background-color: rgba(255,255,255,.4);
       border-radius: 10px;
     }
