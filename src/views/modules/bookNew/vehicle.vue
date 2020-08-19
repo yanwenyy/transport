@@ -353,9 +353,9 @@
         align="center"
         label="磅单类型">
         <template slot-scope="scope">
-          <!--<span v-if="scope.row.measureNum&&scope.row.measureNum.indexOf('RecIn')!=-1">采购</span>-->
-          <!--<span v-if="scope.row.measureNum&&scope.row.measureNum.indexOf('SaleOut')!=-1">销售</span>-->
-          <span>{{scope.row.measureType==1?'采购 ':'销售'}}</span>
+          <span v-if="scope.row.measureNum&&scope.row.measureNum.indexOf('RecIn')!=-1">采购</span>
+          <span v-if="scope.row.measureNum&&scope.row.measureNum.indexOf('SaleOut')!=-1">销售</span>
+          <!--<span>{{scope.row.measureType==1?'采购 ':scope.row.measureType==2?'销售 ':''}}</span>-->
         </template>
       </el-table-column>
       <el-table-column
