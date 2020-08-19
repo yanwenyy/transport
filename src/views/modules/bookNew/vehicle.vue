@@ -164,7 +164,7 @@
       </el-form-item>
     </el-form>
     <div v-if="dataList" @scroll="barScroll" class="elScrollbar">
-      <div :style="{width:(tabelWidth*2.5)+'px',height: '1px',lineHeight:'30px'}"></div>
+      <div :style="{width:(tabelWidth*2.6)+'px',height: '1px',lineHeight:'30px'}"></div>
     </div>
     <el-table ref="tableList"
               height="80vh"
@@ -353,8 +353,9 @@
         align="center"
         label="磅单类型">
         <template slot-scope="scope">
-          <span v-if="scope.row.measureNum&&scope.row.measureNum.indexOf('RecIn')!=-1">采购</span>
-          <span v-if="scope.row.measureNum&&scope.row.measureNum.indexOf('SaleOut')!=-1">销售</span>
+          <!--<span v-if="scope.row.measureNum&&scope.row.measureNum.indexOf('RecIn')!=-1">采购</span>-->
+          <!--<span v-if="scope.row.measureNum&&scope.row.measureNum.indexOf('SaleOut')!=-1">销售</span>-->
+          <span>{{scope.row.measureType==1?'采购 ':'销售'}}</span>
         </template>
       </el-table-column>
       <el-table-column
