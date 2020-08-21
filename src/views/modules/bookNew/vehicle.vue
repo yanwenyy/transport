@@ -391,7 +391,7 @@
         align="center"
         label="运输方式">
         <template slot-scope="scope">
-          {{scope.row.tranType==0?'铁路':'公路'}}
+          {{scope.row.tranType==0?'铁路':scope.row.tranType==1?'公路':scope.row.tranType==2?'纯电动':''}}
         </template>
       </el-table-column>
       <el-table-column
@@ -506,6 +506,10 @@
           {
             value: '1',
             label: '公路'
+          },
+          {
+            value: '2',
+            label: '纯电动'
           }
         ],
         mgList:[

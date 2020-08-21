@@ -105,7 +105,24 @@
           align="center"
           label="重量">
           <template slot-scope="scope">
-            <span>{{scope.row.trainWeigh.toFixed(2)}}</span>
+            <span>{{scope.row.trainWeigh==0||scope.row.trainWeigh%1==0?scope.row.trainWeigh:scope.row.trainWeigh.toFixed(2)}}</span>
+          </template>
+        </el-table-column>
+      </el-table-column>
+      <el-table-column label="电车"  align="center">
+        <el-table-column
+          prop="electNum"
+          header-align="center"
+          align="center"
+          label="车数">
+        </el-table-column>
+        <el-table-column
+          prop="electWeigh"
+          header-align="center"
+          align="center"
+          label="重量">
+          <template slot-scope="scope">
+            <span>{{scope.row.electWeigh==0||scope.row.electWeigh%1==0?scope.row.electWeigh:scope.row.electWeigh.toFixed(2)}}</span>
           </template>
         </el-table-column>
       </el-table-column>
@@ -122,7 +139,7 @@
           align="center"
           label="重量">
           <template slot-scope="scope">
-            <span>{{scope.row.carWeigh.toFixed(2)}}</span>
+            <span>{{scope.row.carWeigh==0||scope.row.carWeigh%1==0?scope.row.carWeigh:scope.row.carWeigh.toFixed(2)}}</span>
           </template>
         </el-table-column>
       </el-table-column>
@@ -165,11 +182,25 @@
         prop="trainWeigh"
         align="center"
         label="铁路">
+        <template slot-scope="scope">
+          <span>{{scope.row.trainWeigh==0||scope.row.trainWeigh%1==0?scope.row.trainWeigh:scope.row.trainWeigh.toFixed(2)}}</span>
+        </template>
+      </el-table-column>
+      <el-table-column
+        prop="electWeigh"
+        align="center"
+        label="电车">
+        <template slot-scope="scope">
+          <span>{{scope.row.electWeigh==0||scope.row.electWeigh%1==0?scope.row.electWeigh:scope.row.electWeigh.toFixed(2)}}</span>
+        </template>
       </el-table-column>
       <el-table-column
         prop="carWeigh"
         align="center"
         label="公路">
+        <template slot-scope="scope">
+          <span>{{scope.row.carWeigh==0||scope.row.carWeigh%1==0?scope.row.carWeigh:scope.row.carWeigh.toFixed(2)}}</span>
+        </template>
       </el-table-column>
       <el-table-column
         prop="sumWeigh"
@@ -248,6 +279,9 @@
           {
             value: '1',
             label: '公路'
+          },{
+            value: '2',
+            label: '纯电动'
           }
         ],
       }
@@ -282,7 +316,8 @@
             'meaType': this.dataForm.meaType,
             'materialsPname': this.dataForm.materialsPname,
             'emissionStand': this.dataForm.emissionStand,
-            'materialsName':this.dataForm.materialsName
+            'tranType': this.dataForm.tranType,
+            'materialsName': this.dataForm.materialsName
           })
         }).then(({data}) => {
           if (data && data.code === 10000) {
