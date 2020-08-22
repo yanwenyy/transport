@@ -353,9 +353,11 @@
         align="center"
         label="磅单类型">
         <template slot-scope="scope">
-          <span v-if="scope.row.measureNum&&scope.row.measureNum.indexOf('RecIn')!=-1">采购</span>
-          <span v-if="scope.row.measureNum&&scope.row.measureNum.indexOf('SaleOut')!=-1">销售</span>
-          <!--<span>{{scope.row.measureType==1?'采购 ':scope.row.measureType==2?'销售 ':''}}</span>-->
+          <div v-if="scope.row.measureType==null||scope.row.measureType==''">
+            <span v-if="scope.row.measureNum&&scope.row.measureNum.indexOf('RecIn')!=-1">采购</span>
+            <span v-if="scope.row.measureNum&&scope.row.measureNum.indexOf('SaleOut')!=-1">销售</span>
+          </div>
+          <span v-if="scope.row.measureType!=null&&scope.row.measureType!=''">{{scope.row.measureType==1?'采购 ':scope.row.measureType==2?'销售 ':''}}</span>
         </template>
       </el-table-column>
       <el-table-column
@@ -497,7 +499,11 @@
           }, {
           value: '国六',
           label: '国六'
-        }],
+          },
+          {
+            value: '纯电动',
+            label: '纯电动'
+          }],
         ysfs:[
           {
             value: '0',
