@@ -351,6 +351,10 @@
           {
             value:"1",
             label: '公路'
+          },
+          {
+            value: '2',
+            label: '纯电动'
           }
         ],
         bdClass:[
