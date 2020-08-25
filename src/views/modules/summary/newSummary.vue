@@ -175,7 +175,7 @@
         align="center"
         label="合计类型">
         <template slot-scope="scope">
-          <span>{{scope.row.measureType==1?'采购':scope.row.measureType==1?'销售':'采购+销售'}}</span>
+          <span>{{scope.row.measureType==1?'采购':scope.row.measureType==2?'销售':'采购+销售'}}</span>
         </template>
       </el-table-column>
       <el-table-column
@@ -206,6 +206,9 @@
         prop="sumWeigh"
         align="center"
         label="总计">
+        <template slot-scope="scope">
+          <span>{{scope.row.sumWeigh==0||scope.row.sumWeigh%1==0?scope.row.sumWeigh:scope.row.sumWeigh.toFixed(2)}}</span>
+        </template>
       </el-table-column>
       <el-table-column
         prop="percentage"
