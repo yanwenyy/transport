@@ -54,7 +54,7 @@
         prop="carWeigh"
         header-align="center"
         align="center"
-        label="汽车运输量(万t)">
+        label="汽车运输量(吨)">
         <template slot-scope="scope">
           <span>{{scope.row.carWeigh.toFixed(2)}}</span>
         </template>
@@ -63,7 +63,7 @@
         prop="trainWeigh"
         header-align="center"
         align="center"
-        label="火车运输量(万t)">
+        label="火车运输量(吨)">
         <template slot-scope="scope">
           <span>{{scope.row.trainWeigh.toFixed(2)}}</span>
         </template>
@@ -72,7 +72,7 @@
         prop="sumWeigh"
         header-align="center"
         align="center"
-        label="总运输量(万t)">
+        label="总运输量(吨)">
         <template slot-scope="scope">
           <span>{{scope.row.sumWeigh.toFixed(2)}}</span>
         </template>
