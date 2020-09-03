@@ -130,8 +130,8 @@
                   注意:
                 </div>
                 <div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;excel批量导入将覆盖询单内现有物料;上传文件类型仅限excel文件!</div>
-                <div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;模板内有内容的单元格为必填项,请严格按照模板格式填写!</div>
-                <div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;计量单号不能重复!</div>
+                <div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;计量单号、重量不能重复，数值不能是公式，时间格式为yyyy/m/d hh:mm:ss，例：2020/7/1 01:46:10。请严格按照模板格式填写!</div>
+
               </div>
             </div>
           </template>
