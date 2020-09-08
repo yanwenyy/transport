@@ -69,6 +69,12 @@
         </template>
       </el-table-column>
       <el-table-column
+        prop="materialsName"
+        header-align="center"
+        align="center"
+        label="物料名称">
+      </el-table-column>
+      <el-table-column
         prop="carNum"
         header-align="center"
         align="center"

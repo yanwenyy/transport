@@ -69,6 +69,15 @@
         </template>
       </el-table-column>
       <el-table-column
+        prop="trainWeigh"
+        header-align="center"
+        align="center"
+        label="纯电动运输量(吨)">
+        <template slot-scope="scope">
+          <span>{{scope.row.electWeigh.toFixed(2)}}</span>
+        </template>
+      </el-table-column>
+      <el-table-column
         prop="sumWeigh"
         header-align="center"
         align="center"

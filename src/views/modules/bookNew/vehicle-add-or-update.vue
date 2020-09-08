@@ -498,7 +498,7 @@
                 'doorPostName': this.dataForm.doorPostName,
                 'poundRoom': this.dataForm.poundRoom,
                 'carNum': this.dataForm.carNum,
-                'registTime': !this.dataForm.id ||this.dataForm.registTime.indexOf("00:00:00")==-1? this.dataForm.registTime+" 00:00:00":this.dataForm.registTime,
+                'registTime': !this.dataForm.id ||this.dataForm.registTime&&this.dataForm.registTime.indexOf("00:00:00")==-1? this.dataForm.registTime+" 00:00:00":this.dataForm.registTime,
                 'vehicleNum': this.dataForm.vehicleNum,
                 'engineNum': this.dataForm.engineNum,
                 'fuelType': this.dataForm.fuelType,

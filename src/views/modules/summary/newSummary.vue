@@ -110,7 +110,7 @@
           </template>
         </el-table-column>
       </el-table-column>
-      <el-table-column label="电车" align="center">
+      <el-table-column label="纯电动" align="center">
         <el-table-column
           prop="electNum"
           header-align="center"
@@ -190,7 +190,7 @@
       <el-table-column
         prop="electWeigh"
         align="center"
-        label="电车">
+        label="纯电动">
         <template slot-scope="scope">
           <span>{{scope.row.electWeigh==0||scope.row.electWeigh%1==0?scope.row.electWeigh:scope.row.electWeigh.toFixed(2)}}</span>
         </template>
