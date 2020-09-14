@@ -34,7 +34,7 @@
         <!--<el-button v-if="isAuth('sys:user:delete')" type="danger" @click="deleteHandle()" :disabled="dataListSelections.length <= 0">批量删除</el-button>-->
       </el-form-item>
     </el-form>
-    <div class="sumWeigh">总运输量:{{detailList.sumWeigh}}</div>
+    <div class="sumWeigh">总运输量:{{detailList.sumWeigh||dataForm.sum}}</div>
     <el-table
       :data="dataList"
       height="80vh"
@@ -125,7 +125,11 @@
           timeStart: '',
           timeEnd: '',
           materialsNum:'',
-          emissionStand:''
+          emissionStand:'',
+          tranType:'',
+          measureType:'',
+          matBo:'',
+          sum:''
         },
         dataList: [],
         pageIndex: 1,
@@ -148,8 +152,15 @@
     components: {
     },
     activated () {
-      this.dataForm.materialsNum=this.$route.params.list.materialsNum;
-      this.detailList=this.$route.params.list;
+      console.log(this.$route.params)
+      this.dataForm.materialsNum=this.$route.params.list.materialsNum||'';
+      this.detailList=this.$route.params.list||'';
+      this.dataForm.tranType=this.$route.params.tranType||'';
+      this.dataForm.timeStart=this.$route.params.timeStart||'';
+      this.dataForm.timeEnd=this.$route.params.timeEnd||'';
+      this.dataForm.measureType=this.$route.params.measureType||'';
+      this.dataForm.matBo=this.$route.params.matBo;
+      this.dataForm.sum=this.$route.params.sum||'';
       this.getDataList();
     },
     methods: {
@@ -164,7 +175,11 @@
             'pageSize': this.pageSize,
             'timeStart': this.dataForm.timeStart||'',
             'timeEnd': this.dataForm.timeEnd||'',
-            'materialsNum': this.dataForm.materialsNum
+            'materialsNum': this.dataForm.materialsNum,
+            'tranType': this.dataForm.tranType,
+            'emissionStand': this.dataForm.emissionStand,
+            'measureType': this.dataForm.measureType,
+            'matBo': this.dataForm.matBo,
           })
         }).then(({data}) => {
           if (data && data.code === 10000) {
@@ -191,8 +206,8 @@
 
       //导出
       down (){
-        var url='/jinding/po/sum/details?monthTime='+this.dataForm.monthTime+'&dayTime='+this.dataForm.dayTime+'&tranType=&emissionStand='+this.dataForm.emissionStand+ '&materialsNum='+this.dataForm.materialsNum;
-        // console.log(url)
+        var url='/jinding/po/sum/details?timeStart='+this.dataForm.timeStart+'&timeEnd='+this.dataForm.timeEnd+'&tranType='+this.dataForm.tranType+'&emissionStand='+this.dataForm.emissionStand+ '&materialsNum='+this.dataForm.materialsNum+'&measureType='+this.dataForm.measureType+ '&matBo='+this.dataForm.matBo;
+        console.log(url)
         window.open(this.$http.adornUrl(url));
       },
     }

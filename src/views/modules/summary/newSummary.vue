@@ -184,7 +184,7 @@
         align="center"
         label="铁路">
         <template slot-scope="scope">
-          <span>{{scope.row.trainWeigh==0||scope.row.trainWeigh%1==0?scope.row.trainWeigh:scope.row.trainWeigh.toFixed(2)}}</span>
+          <span class="cursor" @click="addOrUpdateHandle('',0,scope.row.measureType,scope.row.trainWeigh)">{{scope.row.trainWeigh==0||scope.row.trainWeigh%1==0?scope.row.trainWeigh:scope.row.trainWeigh.toFixed(2)}}</span>
         </template>
       </el-table-column>
       <el-table-column
@@ -192,7 +192,7 @@
         align="center"
         label="纯电动">
         <template slot-scope="scope">
-          <span>{{scope.row.electWeigh==0||scope.row.electWeigh%1==0?scope.row.electWeigh:scope.row.electWeigh.toFixed(2)}}</span>
+          <span class="cursor" @click="addOrUpdateHandle('',2,scope.row.measureType,scope.row.electWeigh)">{{scope.row.electWeigh==0||scope.row.electWeigh%1==0?scope.row.electWeigh:scope.row.electWeigh.toFixed(2)}}</span>
         </template>
       </el-table-column>
       <el-table-column
@@ -200,7 +200,7 @@
         align="center"
         label="公路">
         <template slot-scope="scope">
-          <span>{{scope.row.carWeigh==0||scope.row.carWeigh%1==0?scope.row.carWeigh:scope.row.carWeigh.toFixed(2)}}</span>
+          <span class="cursor" @click="addOrUpdateHandle('',1,scope.row.measureType,scope.row.carWeigh)">{{scope.row.carWeigh==0||scope.row.carWeigh%1==0?scope.row.carWeigh:scope.row.carWeigh.toFixed(2)}}</span>
         </template>
       </el-table-column>
       <el-table-column
@@ -208,7 +208,7 @@
         align="center"
         label="总计">
         <template slot-scope="scope">
-          <span>{{scope.row.sumWeigh==0||scope.row.sumWeigh%1==0?scope.row.sumWeigh:scope.row.sumWeigh.toFixed(2)}}</span>
+          <span class="cursor" @click="addOrUpdateHandle('','',scope.row.measureType,scope.row.sumWeigh)">{{scope.row.sumWeigh==0||scope.row.sumWeigh%1==0?scope.row.sumWeigh:scope.row.sumWeigh.toFixed(2)}}</span>
         </template>
       </el-table-column>
       <el-table-column
@@ -494,7 +494,7 @@
         this.dataListSelections = val
       },
       // 新增 / 修改
-      addOrUpdateHandle(id) {
+      addOrUpdateHandle (id, tranType, measureType, sum) {
         // this.addOrUpdateVisible = true
         // this.$nextTick(() => {
         //   this.$refs.addOrUpdate.init(id)
@@ -504,7 +504,13 @@
           name: 'summary-detail',
           // name: 'mallList',
           params: {
-            list: id
+            list: id,
+            matBo: true,
+            timeStart: this.dataForm.timeStart,
+            timeEnd: this.dataForm.timeEnd,
+            tranType: tranType,
+            measureType: measureType==1 || measureType==2 ? measureType : '',
+            sum: sum
           }
         })
       },
@@ -567,5 +573,8 @@
     font-size: 18px;
     margin: 20px 0;
     font-weight: bold;
+  }
+  .cursor{
+    cursor:pointer;
   }
 </style>

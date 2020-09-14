@@ -199,7 +199,8 @@
           name: 'summary-detail',
           // name: 'mallList',
           params: {
-            list: id
+            list: id,
+            matBo: false
           }
         })
       },
