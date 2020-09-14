@@ -1,20 +1,20 @@
 <template>
   <div class="mod-user">
     <el-form :inline="true" :model="dataForm" @keyup.enter.native="getDataList()">
-      <el-form-item label="月份:">
+      <el-form-item label="开始时间:">
         <el-date-picker
-          v-model="dataForm.monthTime"
-          value-format="yyyy-MM"
-          type="month"
-          placeholder="选择月份" @change="dataForm.dayTime=''">
+          v-model="dataForm.timeStart"
+          type="datetime"
+          value-format="yyyy-MM-dd HH:mm:ss"
+          placeholder="选择日期">
         </el-date-picker>
       </el-form-item>
-      <el-form-item label="日期:">
+      <el-form-item label="结束时间:">
         <el-date-picker
-          v-model="dataForm.dayTime"
-          value-format="yyyy-MM-dd"
-          type="date"
-          placeholder="选择日期"  @change="dataForm.monthTime=''">
+          v-model="dataForm.timeEnd"
+          type="datetime"
+          value-format="yyyy-MM-dd HH:mm:ss"
+          placeholder="选择日期">
         </el-date-picker>
       </el-form-item>
       <el-form-item label="排放标准:">
@@ -122,8 +122,8 @@
     data () {
       return {
         dataForm: {
-          monthTime: '',
-          dayTime: '',
+          timeStart: '',
+          timeEnd: '',
           materialsNum:'',
           emissionStand:''
         },
@@ -162,8 +162,8 @@
           params: this.$http.adornParams({
             'pageNum': this.pageIndex,
             'pageSize': this.pageSize,
-            'monthTime': this.dataForm.monthTime||'',
-            'dayTime': this.dataForm.dayTime||'',
+            'timeStart': this.dataForm.timeStart||'',
+            'timeEnd': this.dataForm.timeEnd||'',
             'materialsNum': this.dataForm.materialsNum
           })
         }).then(({data}) => {
