@@ -189,6 +189,7 @@
         label="ID">
       </el-table-column>
       <el-table-column
+        width="120"
         v-if="checkedCities.indexOf('进厂时间')!=-1"
         prop="enterTime"
         align="center"
