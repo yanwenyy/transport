@@ -354,8 +354,9 @@
 
       //导出
       down (){
-        var url='/jinding/outcar/port?timeStart='+this.dataForm.timeStart+'&timeEnd='+this.dataForm.timeEnd+ '&emissionStand='+this.dataForm.emissionStand+'&fuelType='+this.dataForm.fuelType;
+        var url='/jinding/outcar/port?timeStart='+this.dataForm.timeStart+'&timeEnd='+this.dataForm.timeEnd+ '&emissionStand='+this.dataForm.emissionStand+'&fuelType='+this.dataForm.fuelType+'&carnum='+this.dataForm.carNum;
         window.open(this.$http.adornUrl(url));
+        console.log(url)
       },
     }
   }
