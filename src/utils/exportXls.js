@@ -61,16 +61,6 @@ var exportXls = {
       _this=this;
     if (Object.prototype.toString.call(_arr) === '[object Object]') {
       _str = toTabelStr(_arr);
-      // _tabelDom = this.parseDom(`<table>${_str}</table>`);
-      // if (_arr.startRow && _arr.endRow && _arr.spanCol) {
-      //     var _spanCol = _arr.spanCol;
-      //     if (Array.isArray(_spanCol)) {
-      //         var i = 0, len = _spanCol.length;
-      //         for (; i < len; i++) {
-      //             this.autoRowSpan(_tabelDom, _arr.startRow, _arr.endRow, _spanCol[i]);
-      //         }
-      //     }
-      // }
       _tabelDom = toSpanTabel(_str,_arr);
     }else if (Object.prototype.toString.call(_arr) === '[object Array]') {
       var i=0,len=_arr.length,arrTabelDom='';
@@ -78,20 +68,6 @@ var exportXls = {
         var _s=toTabelStr(_arr[i]);
         _tabelDom+= toSpanTabel(_s,_arr[i]);
       }
-      // _tabelDom = this.parseDom(`<table>${_str}</table>`);
-      // var k=0,klen=_arr.length;
-      // for(;k<klen;k++){
-      //     if (_arr[k].startRow&& _arr[k].endRow && _arr[k].spanCol) {
-      //         var _spanCol = _arr[k].spanCol;
-      //         if (Array.isArray(_spanCol)) {
-      //             var j = 0, jlen = _spanCol.length;
-      //             for (; j < jlen; j++) {
-      //                 this.autoRowSpan(_tabelDom, _arr[k].startRow, _arr[k].endRow, _spanCol[j]);
-      //             }
-      //         }
-      //     }
-      // }
-      // _tabelDom = this.nodeToString(_tabelDom[0]);
     } else {
       throw new Error("arguments must be array or obj");
     }
