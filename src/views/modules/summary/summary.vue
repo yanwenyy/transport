@@ -163,7 +163,7 @@
           if (data && data.code === 10000) {
             this.dataList = data.data;
             for(var i in this.dataList){
-              this.dataList[i].trainWeigh=this.dataList[i].sumWeigh-this.dataList[i].carWeigh
+              this.dataList[i].trainWeigh=this.dataList[i].sumWeigh-this.dataList[i].carWeigh-this.dataList[i].electWeigh;
             }
             this.totalPage = data.total
           } else {
