@@ -209,6 +209,8 @@
       down (){
         var url='/jinding/po/sum/details?timeStart='+this.dataForm.timeStart+'&timeEnd='+this.dataForm.timeEnd+'&tranType='+this.dataForm.tranType+'&emissionStand='+this.dataForm.emissionStand+ '&materialsNum='+this.dataForm.materialsNum+'&measureType='+this.dataForm.measureType+ '&matBo='+this.dataForm.matBo;
         window.open(this.$http.adornUrl(url));
+
+
         // this.$http({
         //   url: this.$http.adornUrl('/jinding/sum/details'),
         //   method: 'get',
@@ -223,8 +225,8 @@
         //     'measureType': this.dataForm.measureType,
         //     'matBo': this.dataForm.matBo,
         //   })
-        // }).then(({data}) => {
-        //   if (data && data.code === 10000) {
+        //   }).then(({data}) => {
+        //     if (data && data.code === 10000) {
         //     var datas=data.data;
         //     exportXls.exportList({
         //       thead:' <tr>\n' +
