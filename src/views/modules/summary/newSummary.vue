@@ -98,7 +98,13 @@
           prop="trainNum"
           header-align="center"
           align="center"
-          label="车数">
+          label="车次">
+        </el-table-column>
+        <el-table-column
+          prop="trains"
+          header-align="center"
+          align="center"
+          label="车辆">
         </el-table-column>
         <el-table-column
           prop="trainWeigh"
@@ -115,7 +121,13 @@
           prop="electNum"
           header-align="center"
           align="center"
-          label="车数">
+          label="车次">
+        </el-table-column>
+        <el-table-column
+          prop="elects"
+          header-align="center"
+          align="center"
+          label="车辆">
         </el-table-column>
         <el-table-column
           prop="electWeigh"
@@ -132,7 +144,13 @@
           prop="carNum"
           header-align="center"
           align="center"
-          label="车数">
+          label="车次">
+        </el-table-column>
+        <el-table-column
+          prop="cars"
+          header-align="center"
+          align="center"
+          label="车辆">
         </el-table-column>
         <el-table-column
           prop="carWeigh"
@@ -323,17 +341,20 @@
               '<th rowspan="2">运输类型</th>\n' +
               '<th rowspan="2">物料大类</th>\n' +
               '<th rowspan="2">物料名称</th>\n' +
-              '<th colspan="2">铁路</th>\n' +
-              '<th colspan="2">电车</th>\n' +
-              '<th colspan="2">公路（国五及以上车辆）</th>\n' +
+              '<th colspan="3">铁路</th>\n' +
+              '<th colspan="3">电车</th>\n' +
+              '<th colspan="3">公路（国五及以上车辆）</th>\n' +
               '<th rowspan="2">清洁运输占比(%)</th>\n' +
               '</tr>\n' +
               '<tr>\n' +
-              '<th>车数</th>\n' +
+              '<th>车次</th>\n' +
+              '<th>车辆</th>\n' +
               '<th>重量</th>\n' +
-              '<th>车数</th>\n' +
+              '<th>车次</th>\n' +
+              '<th>车辆</th>\n' +
               '<th>重量</th>\n' +
-              '<th>车数</th>\n' +
+              '<th>车次</th>\n' +
+              '<th>车辆</th>\n' +
               '<th>重量</th>\n' +
               '</tr>';
             //循环遍历，每行加入tr标签，每个单元格加td标签
@@ -344,10 +365,13 @@
                 '<td>' + (v.materialsPname || '') + '</td>\n' +
                 '<td>' + (v.materialsName || '') + '</td>\n' +
                 '<td>' + (v.trainNum) + '</td>\n' +
+                '<td>' + (v.trains) + '</td>\n' +
                 '<td>' + (v.trainWeigh == 0 || v.trainWeigh % 1 == 0 ? v.trainWeigh : v.trainWeigh.toFixed(2)) + '</td>\n' +
                 '<td>' + (v.electNum) + '</td>\n' +
+                '<td>' + (v.elects) + '</td>\n' +
                 '<td>' + (v.electWeigh == 0 || v.electWeigh % 1 == 0 ? v.electWeigh : v.electWeigh.toFixed(2)) + '</td>\n' +
                 '<td>' + (v.carNum) + '</td>\n' +
+                '<td>' + (v.cars) + '</td>\n' +
                 '<td>' + (v.carWeigh == 0 || v.carWeigh % 1 == 0 ? v.carWeigh : v.carWeigh.toFixed(2)) + '</td>\n' +
                 '<td>' + (v.percentage % 1 === 0 ? v.percentage * 100 + '%' : (v.percentage * 100).toFixed(2) + '%') + '</td>\n' +
                 '</tr>';
