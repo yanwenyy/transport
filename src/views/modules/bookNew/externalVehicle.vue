@@ -258,7 +258,7 @@
             'timeEnd': this.dataForm.timeEnd|| '',
             'emissionStand': this.dataForm.emissionStand,
             'fuelType': this.dataForm.fuelType||'',
-            'carNum': this.dataForm.carNum||''
+            'carnum': this.dataForm.carNum||''
           })
         }).then(({data}) => {
           if (data && data.code === 10000) {

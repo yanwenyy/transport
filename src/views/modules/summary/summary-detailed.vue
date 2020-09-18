@@ -118,6 +118,7 @@
 </template>
 
 <script>
+  import exportXls from '../../../utils/exportXls'
   export default {
     data () {
       return {
@@ -207,9 +208,47 @@
       //导出
       down (){
         var url='/jinding/po/sum/details?timeStart='+this.dataForm.timeStart+'&timeEnd='+this.dataForm.timeEnd+'&tranType='+this.dataForm.tranType+'&emissionStand='+this.dataForm.emissionStand+ '&materialsNum='+this.dataForm.materialsNum+'&measureType='+this.dataForm.measureType+ '&matBo='+this.dataForm.matBo;
-        console.log(url)
         window.open(this.$http.adornUrl(url));
-      },
+        // this.$http({
+        //   url: this.$http.adornUrl('/jinding/sum/details'),
+        //   method: 'get',
+        //   params: this.$http.adornParams({
+        //     'pageNum': this.pageIndex,
+        //     'pageSize': 100000000,
+        //     'timeStart': this.dataForm.timeStart||'',
+        //     'timeEnd': this.dataForm.timeEnd||'',
+        //     'materialsNum': this.dataForm.materialsNum,
+        //     'tranType': this.dataForm.tranType,
+        //     'emissionStand': this.dataForm.emissionStand,
+        //     'measureType': this.dataForm.measureType,
+        //     'matBo': this.dataForm.matBo,
+        //   })
+        // }).then(({data}) => {
+        //   if (data && data.code === 10000) {
+        //     var datas=data.data;
+        //     exportXls.exportList({
+        //       thead:' <tr>\n' +
+        //       '<th>供应商</th>\n' +
+        //       '<th>运输方式</th>\n' +
+        //       '<th>物料名称</th>\n' +
+        //       '<th>车牌号</th>\n' +
+        //       '<th>燃油种类</th>\n' +
+        //       '<th>运输量</th>\n' +
+        //       '<th>磅房</th>\n' +
+        //       '<th>进厂时间</th>\n' +
+        //       '</tr>',
+        //       jsonData:datas,
+        //       tdstr:['clientName','tranType','materialsName',
+        //         'carNum','fuelType','netWeigh','poundRoom','enterTime'],
+        //       tdstrFuc:{
+        //         tranType:function (str) {
+        //           return str==0?'铁路':'公路';
+        //         }
+        //       }
+        //     })
+        //   }
+        // })
+      }
     }
   }
 </script>
